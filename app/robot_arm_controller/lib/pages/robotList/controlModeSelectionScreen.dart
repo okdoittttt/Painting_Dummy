@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/autoMode.dart';
+import 'package:robot_arm_controller/pages/automode/autoMode.dart';
 
 class ControlModeSclectionScreen extends StatelessWidget {
   const ControlModeSclectionScreen({super.key});
