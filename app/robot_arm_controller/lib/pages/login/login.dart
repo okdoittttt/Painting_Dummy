@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/robotsconnectionScreen.dart';
+import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

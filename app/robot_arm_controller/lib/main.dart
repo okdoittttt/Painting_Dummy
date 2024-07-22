@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/login.dart';
+import 'package:robot_arm_controller/pages/login/login.dart';
 
 void main() {
   runApp(const MyApp());

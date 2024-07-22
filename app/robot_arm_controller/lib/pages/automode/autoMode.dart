@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/controlModeSelectionScreen.dart';
-import 'package:robot_arm_controller/pages/robotsconnectionScreen.dart';
+import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
+import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 
 class AutoMode extends StatefulWidget {
   const AutoMode({super.key});

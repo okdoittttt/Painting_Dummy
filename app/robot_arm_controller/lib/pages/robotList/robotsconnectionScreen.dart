@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/item/logoutButton.dart';
-import 'package:robot_arm_controller/item/robotsList.dart';
+import 'package:robot_arm_controller/item/loginItems/logoutButton.dart';
+import 'package:robot_arm_controller/item/robotListItems/robotsList.dart';
 
 class RobotsconnectionScreen extends StatefulWidget {
   const RobotsconnectionScreen({super.key});

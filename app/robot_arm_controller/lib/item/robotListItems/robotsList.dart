@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/controlModeSelectionScreen.dart';
+import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
 
 class RobotsList extends StatefulWidget {
   const RobotsList({super.key});
