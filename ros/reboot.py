@@ -102,13 +102,14 @@ getch()
 print("See the Dynamixel LED flickering")
 # Try reboot
 # Dynamixel LED will flicker while it reboots
-dxl_comm_result, dxl_error = packetHandler.reboot(portHandler, DXL_ID)
-if dxl_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-    print("%s" % packetHandler.getRxPacketError(dxl_error))
+for dxl_id in range(11,16):
+    dxl_comm_result, dxl_error = packetHandler.reboot(portHandler, dxl_id)
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error))
 
-print("[ID:%03d] reboot Succeeded\n" % DXL_ID)
+    print("[ID:%03d] reboot Succeeded\n" % dxl_id)
 
 
 # Close port
