@@ -24,25 +24,29 @@ class ControlModeSclectionScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.grey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero
-                ), minimumSize: Size(240, 50)
-              ),
-              child: Text("자동 모드 선택"),
+                  backgroundColor: Colors.orange,
+                  // shape:
+                  //     RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  minimumSize: Size(240, 50)),
+              child: Text("자동 모드 선택",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.grey,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero
-                  ), minimumSize: Size(240, 50)
+                  backgroundColor: Colors.orange,
+                  // shape:
+                  //     RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  minimumSize: Size(240, 50)),
+              child: Text(
+                "수동 모드 선택",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              child: Text("수동 모드 선택"),
             ),
           ],
         ),
