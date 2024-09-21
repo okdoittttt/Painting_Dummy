@@ -20,19 +20,19 @@ class _RobotsListState extends State<RobotsList> {
               isScrollControlled: true,
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(25),
-                  topLeft: Radius.circular(25)
-                )
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25)
+                  )
               ),
               builder: (context) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25.0),
-                      topRight: Radius.circular(25.0)
-                    )
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25.0),
+                          topRight: Radius.circular(25.0)
+                      )
                   ),
                   child: DraggableScrollableSheet(
                     expand: false,
@@ -62,7 +62,7 @@ class _RobotsListState extends State<RobotsList> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.asset(
-                            'assets/home.jpg',
+                            'assets/openmani.jpg',
                             width: double.infinity,
                             height: 230,
                             fit: BoxFit.cover,
