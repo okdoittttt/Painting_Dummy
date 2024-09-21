@@ -66,7 +66,7 @@ if MY_DXL == 'X_SERIES' or MY_DXL == 'MX_SERIES':
     ADDR_GOAL_POSITION = 116
     ADDR_PRESENT_POSITION = 132
     DXL_MINIMUM_POSITION_VALUE = 0
-    DXL_MAXIMUM_POSITION_VALUE = 4095
+    DXL_MAXIMUM_POSITION_VALUE = 4067
     BAUDRATE = 57600
 
 PROTOCOL_VERSION = 2.0
@@ -116,24 +116,44 @@ direction = 1
 lock = threading.Lock()
 
 def move():
-    global moving_dx_id
+    global moving_dx_id, direction
     dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, moving_dx_id, ADDR_PRESENT_POSITION)
     if dxl_comm_result != COMM_SUCCESS:
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
     elif dxl_error != 0:
         print("%s" % packetHandler.getRxPacketError(dxl_error))
 
+    
     move_step = dxl_present_position
+    current_dxl_id = moving_dx_id
     while True:
         with lock:
             if moving:
+                if current_dxl_id != moving_dx_id :
+                    dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, moving_dx_id, ADDR_PRESENT_POSITION)
+                    if dxl_comm_result != COMM_SUCCESS:
+                        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+                    elif dxl_error != 0:
+                        print("%s" % packetHandler.getRxPacketError(dxl_error))
+                    
+                    move_step = dxl_present_position
+                    current_dxl_id=moving_dx_id
+
                 move_step += 13 * direction
+
+                if move_step >= 4067:
+                    move_step = 4067
+                elif move_step < 0 :
+                    move_step = 0
+
                 dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, moving_dx_id, ADDR_GOAL_POSITION, move_step)
+                print(move_step)
                 if dxl_comm_result != COMM_SUCCESS:
                     print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
                 elif dxl_error != 0:
                     print("%s" % packetHandler.getRxPacketError(dxl_error))
         time.sleep(0.01)
+
 
 def main(stdscr):
     global moving, direction, moving_dx_id
@@ -141,6 +161,17 @@ def main(stdscr):
     stdscr.nodelay(True)
     stdscr.clear()
     stdscr.addstr(0, 0, "Press and hold the 'q' key to increase and 'a' key to decrease. Release to stop.")
+    stdscr.addstr(1, 0, "Press and hold the 'w' key to increase and 's' key to decrease. Release to stop.")
+    stdscr.addstr(2, 0, "Press and hold the 'e' key to increase and 'd' key to decrease. Release to stop.")
+    stdscr.addstr(3, 0, "Press and hold the 'r' key to increase and 'f' key to decrease. Release to stop.")
+    stdscr.addstr(4, 0, "Press and hold the 't' key to increase and 'g' key to decrease. Release to stop.")
+    dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, moving_dx_id, ADDR_PRESENT_POSITION)
+    stdscr.addstr(5, 0, f"{moving_dx_id} : {direction} / {dxl_present_position}")
+    if dxl_comm_result != COMM_SUCCESS:
+        stdscr.addstr(6, 0, f"{packetHandler.getTxRxResult(dxl_comm_result)}")
+    elif dxl_error != 0:
+        stdscr.addstr(6, 0, f"{packetHandler.getTxRxResult(dxl_error)}")
+    
     stdscr.refresh()
 
     count_thread = threading.Thread(target=move)
