@@ -17,6 +17,7 @@ class _AutoModeState extends State<AutoMode> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: Text('$robotsName 연결중 ...'),
