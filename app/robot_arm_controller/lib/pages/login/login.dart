@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_arm_controller/pages/join/join.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             Expanded(
                               child: TextFormField(
-                                keyboardType: TextInputType.emailAddress,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   labelText: 'Employee number',
                                   hintText: 'Enter your Employee number here...',
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
-                                            Colors.lightBlue), // 포커스 시 테두리 색상
+                                            Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
-                                            Colors.lightBlue), // 포커스 시 테두리 색상
+                                            Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -205,7 +206,9 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)  => JoinPage()));
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 foregroundColor: Colors.green,
