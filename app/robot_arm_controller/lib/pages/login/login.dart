@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_arm_controller/pages/join/join.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           image: DecorationImage(
             fit: BoxFit.cover,
             image: Image.asset(
-              'assets/home.jpg',
+              'assets/ship3.jpg',
             ).image,
           ),
         ),
@@ -67,11 +68,11 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               children: [
                                 Text(
-                                  "Dummy",
+                                  "DUMMY",
                                   style: TextStyle(
                                       fontSize: 31,
                                       fontWeight: FontWeight.w900,
-                                      color: Colors.blueAccent),
+                                      color: Colors.orange),
                                 ),
                                 SizedBox(width: 9),
                               ],
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             Expanded(
                               child: TextFormField(
-                                keyboardType: TextInputType.emailAddress,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   labelText: 'Employee number',
                                   hintText: 'Enter your Employee number here...',
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
-                                            Colors.lightBlue), // 포커스 시 테두리 색상
+                                            Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
-                                            Colors.lightBlue), // 포커스 시 테두리 색상
+                                            Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -177,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue, // 배경색을 파란색으로 설정
+                                  backgroundColor: Colors.orange, // 배경색을 파란색으로 설정
                                   foregroundColor:
                                       Colors.white, // 텍스트 색상을 흰색으로 설정
                                   textStyle: TextStyle(
@@ -205,7 +206,9 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)  => JoinPage()));
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 foregroundColor: Colors.green,
