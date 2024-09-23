@@ -9,6 +9,8 @@ class RobotsList extends StatefulWidget {
 }
 
 class _RobotsListState extends State<RobotsList> {
+  var robotsName = 'Open Manipulator-X';
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,23 +24,18 @@ class _RobotsListState extends State<RobotsList> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(25),
-                      topLeft: Radius.circular(25)
-                  )
-              ),
+                      topLeft: Radius.circular(25))),
               builder: (context) {
                 return Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25.0),
-                          topRight: Radius.circular(25.0)
-                      )
-                  ),
+                          topRight: Radius.circular(25.0))),
                   child: DraggableScrollableSheet(
                     expand: false,
                     builder: (context, scrollController) {
-                      return ControlModeSclectionScreen(
-                      );
+                      return ControlModeSclectionScreen();
                     },
                   ),
                 );
@@ -57,31 +54,47 @@ class _RobotsListState extends State<RobotsList> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: 12),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.asset(
-                            'assets/openmani.jpg',
-                            width: double.infinity,
-                            height: 230,
-                            fit: BoxFit.cover,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 3),
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.asset(
+                              'assets/openmani.jpg',
+                              width: double.infinity,
+                              height: 230,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Positioned.fill(
-                          child: Center(
-                            child: Text(
-                              'TEST',
-                              style: TextStyle(
-                                color: Colors.white, // 텍스트 색상을 이미지 위에서 잘 보이도록 설정
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.black54, // 텍스트 배경을 반투명 검정색으로 설정
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(14),
+                                    bottomLeft: Radius.circular(14),
+                                  )),
+                              child: Center(
+                                child: Text(
+                                  robotsName,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
