@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/automode/autoMode.dart';
+import 'package:robot_arm_controller/pages/manualmode/manualMode.dart';
 
 class ControlModeSclectionScreen extends StatelessWidget {
   const ControlModeSclectionScreen({super.key});
@@ -36,7 +37,9 @@ class ControlModeSclectionScreen extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ManualMode()));
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   // shape:
