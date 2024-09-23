@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'package:robot_arm_controller/pages/manualmode/joysticModeDropdown.dart';
@@ -5,14 +6,14 @@ import 'package:robot_arm_controller/pages/manualmode/joysticModeDropdown.dart';
 const ballSize = 20.0;
 const step = 10.0;
 
-class BasicJoystick extends StatefulWidget {
-  const BasicJoystick({super.key});
+class SquareJoystick extends StatefulWidget {
+  const SquareJoystick({super.key});
 
   @override
-  State<BasicJoystick> createState() => _JoystickExampleState();
+  State<SquareJoystick> createState() => _SquareJoystickExampleState();
 }
 
-class _JoystickExampleState extends State<BasicJoystick> {
+class _SquareJoystickExampleState extends State<SquareJoystick> {
   double _x = 100;
   double _y = 100;
   JoystickMode _joystickMode = JoystickMode.all;
@@ -28,6 +29,7 @@ class _JoystickExampleState extends State<BasicJoystick> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
+        title: const Text('Square Joystick'),
         actions: [
           JoystickModeDropdown(
             mode: _joystickMode,
@@ -47,6 +49,10 @@ class _JoystickExampleState extends State<BasicJoystick> {
               alignment: const Alignment(0, 0.8),
               child: Joystick(
                 mode: _joystickMode,
+                base: JoystickSquareBase(
+                  mode: _joystickMode,
+                ),
+                stickOffsetCalculator: const RectangleStickOffsetCalculator(),
                 listener: (details) {
                   setState(() {
                     _x = _x + step * details.x;

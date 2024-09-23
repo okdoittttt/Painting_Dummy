@@ -5,14 +5,14 @@ import 'package:robot_arm_controller/pages/manualmode/joysticModeDropdown.dart';
 const ballSize = 20.0;
 const step = 10.0;
 
-class BasicJoystick extends StatefulWidget {
-  const BasicJoystick({super.key});
+class JoystickAreaExample extends StatefulWidget {
+  const JoystickAreaExample({super.key});
 
   @override
-  State<BasicJoystick> createState() => _JoystickExampleState();
+  State<JoystickAreaExample> createState() => _JoystickAreaExampleState();
 }
 
-class _JoystickExampleState extends State<BasicJoystick> {
+class _JoystickAreaExampleState extends State<JoystickAreaExample> {
   double _x = 100;
   double _y = 100;
   JoystickMode _joystickMode = JoystickMode.all;
@@ -28,6 +28,7 @@ class _JoystickExampleState extends State<BasicJoystick> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
+        title: const Text('Joystick Area'),
         actions: [
           JoystickModeDropdown(
             mode: _joystickMode,
@@ -40,22 +41,20 @@ class _JoystickExampleState extends State<BasicJoystick> {
         ],
       ),
       body: SafeArea(
-        child: Stack(
-          children: [
-            Ball(_x, _y),
-            Align(
-              alignment: const Alignment(0, 0.8),
-              child: Joystick(
-                mode: _joystickMode,
-                listener: (details) {
-                  setState(() {
-                    _x = _x + step * details.x;
-                    _y = _y + step * details.y;
-                  });
-                },
-              ),
-            ),
-          ],
+        child: JoystickArea(
+          mode: _joystickMode,
+          initialJoystickAlignment: const Alignment(0, 0.8),
+          listener: (details) {
+            setState(() {
+              _x = _x + step * details.x;
+              _y = _y + step * details.y;
+            });
+          },
+          child: Stack(
+            children: [
+              Ball(_x, _y),
+            ],
+          ),
         ),
       ),
     );
