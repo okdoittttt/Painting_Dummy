@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
           image: DecorationImage(
             fit: BoxFit.cover,
             image: Image.asset(
-              'assets/home.jpg',
+              'assets/ship3.jpg',
             ).image,
           ),
         ),
@@ -67,11 +67,11 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               children: [
                                 Text(
-                                  "Dummy",
+                                  "DUMMY",
                                   style: TextStyle(
                                       fontSize: 31,
                                       fontWeight: FontWeight.w900,
-                                      color: Colors.blueAccent),
+                                      color: Colors.orange),
                                 ),
                                 SizedBox(width: 9),
                               ],
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue, // 배경색을 파란색으로 설정
+                                  backgroundColor: Colors.orange, // 배경색을 파란색으로 설정
                                   foregroundColor:
                                       Colors.white, // 텍스트 색상을 흰색으로 설정
                                   textStyle: TextStyle(
