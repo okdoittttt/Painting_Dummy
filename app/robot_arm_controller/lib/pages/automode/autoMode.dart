@@ -11,7 +11,7 @@ class AutoMode extends StatefulWidget {
 
 class _AutoModeState extends State<AutoMode> {
   // 로봇 데이터를 받은 후 아래 화면에 사용
-  String robotsName = 'TEST';
+  String robotsName = 'Open MANIPULATOR-X';
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class _AutoModeState extends State<AutoMode> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                 child: Text(
-                  'OPEN MANIPULATOR X',
+                  robotsName,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.orange, fontSize: 25),
                 ),
