@@ -48,7 +48,7 @@ class _RobotsListState extends State<RobotsList> {
               color: Colors.white,
             ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 30, 16, 12),
+              padding: EdgeInsets.fromLTRB(16, 25, 16, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,7 +56,7 @@ class _RobotsListState extends State<RobotsList> {
                     padding: EdgeInsets.only(bottom: 12),
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 3),
+                          border: Border.all(color: Colors.grey.withOpacity(0.8), width: 3),
                           borderRadius: BorderRadius.circular(16)),
                       child: Stack(
                         children: [
@@ -78,8 +78,8 @@ class _RobotsListState extends State<RobotsList> {
                               decoration: BoxDecoration(
                                   color: Colors.orange,
                                   borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(14),
-                                    bottomLeft: Radius.circular(14),
+                                    bottomRight: Radius.circular(13),
+                                    bottomLeft: Radius.circular(13),
                                   )),
                               child: Center(
                                 child: Text(
