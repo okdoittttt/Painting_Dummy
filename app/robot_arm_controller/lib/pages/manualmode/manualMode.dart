@@ -16,7 +16,8 @@ class ManualMode extends StatelessWidget {
         appBar: AppBar(
           title: Text('ROBOT CONTROLLER'),
         ),
-        body: SquareJoystick(),
+        body: BasicJoystick(),
+        // body: SquareJoystick(),
       ),
     );
   }
