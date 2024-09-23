@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/manualmode/joystick.dart';
 import 'package:robot_arm_controller/pages/manualmode/squareJoystick.dart';
