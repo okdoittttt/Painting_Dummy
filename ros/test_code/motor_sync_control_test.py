@@ -65,7 +65,7 @@ else:
     quit()
 
 # 모터 ID 11과 12의 토크 활성화
-for dxl_id in range(11, 13):
+for dxl_id in range(11, 16):
     dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_TORQUE_ENABLE, TORQUE_ENABLE)
     if dxl_comm_result != COMM_SUCCESS:
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -83,8 +83,21 @@ moving_12 = False  # 모터 12 움직임 여부
 moving_dx_id_12 = 12  # 모터 12 ID
 direction_12 = 1  # 모터 12의 이동 방향
 
+moving_13 = False  # 모터 12 움직임 여부
+moving_dx_id_13 = 13  # 모터 12 ID
+direction_13 = 1  # 모터 12의 이동 방향
+
+moving_14 = False  # 모터 12 움직임 여부
+moving_dx_id_14 = 14  # 모터 12 ID
+direction_14 = 1  # 모터 12의 이동 방향
+
+moving_15 = False  # 모터 12 움직임 여부
+moving_dx_id_15 = 15  # 모터 12 ID
+direction_15 = 1  # 모터 12의 이동 방향
+
 lock_11 = threading.Lock()  # 모터 11 제어에 사용되는 쓰레드 락
 lock_12 = threading.Lock()  # 모터 12 제어에 사용되는 쓰레드 락
+lock_forward = threading.Lock()
 
 # 모터 11을 제어하는 함수
 def move11():
@@ -171,9 +184,97 @@ def move12():
                     print("%s" % packetHandler.getRxPacketError(dxl_error_12))
         time.sleep(0.01)
 
+# 모터 12 제어 함수
+def move13():
+    global moving_dx_id_13, direction_13
+    dxl_present_position_13, dxl_comm_result_13, dxl_error_13 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_13, ADDR_PRESENT_POSITION)
+    if dxl_comm_result_13 != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result_13))
+    elif dxl_error != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error_13))
+
+    move_step = dxl_present_position_13
+
+    while True:
+        with lock_12:
+            if moving_13:  # 모터 12가 움직일 때
+                move_step += 13 * direction_13  # 이동 단계 설정
+
+                # 위치 값 제한
+                if move_step >= 4067:
+                    move_step = 4067
+                elif move_step < 0:
+                    move_step = 0
+
+                dxl_comm_result_13, dxl_error_13 = packetHandler.write4ByteTxRx(portHandler, moving_dx_id_13, ADDR_GOAL_POSITION, move_step)
+                print(move_step)
+                if dxl_comm_result_13 != COMM_SUCCESS:
+                    print("%s" % packetHandler.getTxRxResult(dxl_comm_result_13))
+                elif dxl_error != 0:
+                    print("%s" % packetHandler.getRxPacketError(dxl_error_13))
+        time.sleep(0.01)
+
+
+# 앞으로 움직이는 함수
+def moveForward():
+    global moving_dx_id_12, direction_12, moving_dx_id_13, direction_13
+
+    # 모터 11, 12의 현재 위치 읽기
+    dxl_present_position_12, dxl_comm_result_12, dxl_error_12 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_12, ADDR_PRESENT_POSITION)
+    if dxl_comm_result_12 != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result_12))
+    elif dxl_error_12 != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error_12))
+
+    move_step_12 = dxl_present_position_12
+
+    dxl_present_position_13, dxl_comm_result_13, dxl_error_13 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_13, ADDR_PRESENT_POSITION)
+    if dxl_comm_result_13 != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result_13))
+    elif dxl_error_13 != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error_13))
+
+    move_step_13 = dxl_present_position_13 
+
+    while True:
+        with lock_forward:  # 쓰레드 안전성 확보
+            if moving_12:  # 모터 11이 움직일 때
+                move_step_12 += 13 * direction_12  # 이동 단계 설정
+                move_step_13 += 13 * direction_13  # 모터 12도 함께 이동
+                
+                # 위치 값 제한
+                if move_step_12 >= 4067:
+                    move_step_12 = 4067
+                elif move_step_12 < 0 :
+                    move_step_12 = 0
+
+                if move_step_13 >= 4067:
+                    move_step_13 = 4067
+                elif move_step_13 < 0 :
+                    move_step_13 = 0
+
+                # 모터 11, 12의 현재 위치 읽기
+                dxl_present_position_12, dxl_comm_result_12, dxl_error_12 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_12, ADDR_PRESENT_POSITION)
+                if dxl_comm_result_12 != COMM_SUCCESS:
+                    print("%s" % packetHandler.getTxRxResult(dxl_comm_result_12))
+                elif dxl_error_12 != 0:
+                    print("%s" % packetHandler.getRxPacketError(dxl_error_12))
+
+                dxl_present_position_13, dxl_comm_result_13, dxl_error_13 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_13, ADDR_PRESENT_POSITION)
+                if dxl_comm_result_13 != COMM_SUCCESS:
+                    print("%s" % packetHandler.getTxRxResult(dxl_comm_result_13))
+                elif dxl_error_13 != 0:
+                    print("%s" % packetHandler.getRxPacketError(dxl_error_13))
+
+                print(f"${move_step_12} / ${move_step_13}")  # 현재 위치 출력
+
+        time.sleep(0.01)
+
 # curses를 이용해 키보드 입력을 처리하는 함수
 def main(stdscr):
-    global moving_11, moving_12, direction_11, direction_12, moving_dx_id_11, moving_dx_id_12
+    global moving_11, moving_12, moving_13
+    global direction_11, direction_12, direction_13
+    global moving_dx_id_11, moving_dx_id_12, moving_dx_id_13 
 
     stdscr.nodelay(True)  # 입력 대기 없이 바로 처리
     stdscr.clear()
@@ -195,6 +296,14 @@ def main(stdscr):
     elif dxl_error_12 != 0:
         stdscr.addstr(6, 0, f"{packetHandler.getTxRxResult(dxl_error_12)}")
 
+
+    dxl_present_position_13, dxl_comm_result_13, dxl_error_13 = packetHandler.read4ByteTxRx(portHandler, moving_dx_id_13, ADDR_PRESENT_POSITION)
+    stdscr.addstr(5, 0, f"{moving_dx_id_13} : {direction_13} / {dxl_present_position_13}")
+    if dxl_comm_result_13 != COMM_SUCCESS:
+        stdscr.addstr(6, 0, f"{packetHandler.getTxRxResult(dxl_comm_result_13)}")
+    elif dxl_error_13 != 0:
+        stdscr.addstr(6, 0, f"{packetHandler.getTxRxResult(dxl_error_13)}")
+
     stdscr.refresh()
 
     # 각 모터에 대한 제어 쓰레드 시작
@@ -206,6 +315,10 @@ def main(stdscr):
     count_thread_12.daemon = True
     count_thread_12.start()
     
+    count_thread_forward = threading.Thread(target=moveForward)
+    count_thread_forward.daemon = True
+    count_thread_forward.start()
+
     while True:
         key = stdscr.getch()
 
@@ -223,9 +336,11 @@ def main(stdscr):
                 direction_11 = -1
                 direction_12 = -1
         elif key == ord('w'):
-            with lock_12:
+            with lock_forward:
                 moving_12 = True
+                moving_13 = True
                 direction_12 = 1
+                direction_13 = -1
         elif key == ord('s'):
             with lock_12:
                 moving_12 = True
@@ -235,6 +350,8 @@ def main(stdscr):
                 moving_11 = False
             with lock_12:
                 moving_12 = False
+            with lock_forward:
+                moving_13 = False
 
         if key == 27:  # ESC 키가 눌리면 종료
             break
@@ -245,7 +362,7 @@ def main(stdscr):
 curses.wrapper(main)
 
 # 프로그램 종료 후 토크 비활성화
-for dxl_id in range(11, 13):
+for dxl_id in range(11, 16):
     dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_TORQUE_ENABLE, TORQUE_DISABLE)
     if dxl_comm_result != COMM_SUCCESS:
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
