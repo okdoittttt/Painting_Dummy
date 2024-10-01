@@ -4,14 +4,14 @@ import termios
 import tty
 import time
 import curses
-from dynamixel_sdk import *  # Uses Dynamixel SDK library
+from dynamixel_sdk import *  # Dynamixel SDK 라이브러리 사용
 
-if os.name == 'nt':
+# 윈도우와 리눅스/맥에서 다른 키보드 입력 함수
+if os.name == 'nt':  # 윈도우일 경우
     import msvcrt
     def getch():
         return msvcrt.getch().decode()
-else:
-    import sys, tty, termios
+else:  # 리눅스/맥일 경우
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     def getch():
@@ -22,31 +22,34 @@ else:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
 
-#********* DYNAMIXEL Model definition *********
-MY_DXL = 'X_SERIES'
+# ********* DYNAMIXEL 모델 정의 *********
+MY_DXL = 'X_SERIES'  # 사용할 Dynamixel 모델
 
-# Control table address
+# 제어 테이블 주소 정의
 if MY_DXL == 'X_SERIES' or MY_DXL == 'MX_SERIES':
-    ADDR_OPERATING_MODE = 11
-    ADDR_TORQUE_ENABLE = 64
-    ADDR_GOAL_VELOCITY = 104
-    ADDR_PRESENT_POSITION = 132
-    DXL_MINIMUM_POSITION_VALUE = 0
-    DXL_MAXIMUM_POSITION_VALUE = 4067
-    BAUDRATE = 57600
+    ADDR_OPERATING_MODE = 11  # 운영 모드 설정 주소
+    ADDR_TORQUE_ENABLE = 64  # 토크 활성화 주소
+    ADDR_GOAL_VELOCITY = 104  # 목표 속도 주소
+    ADDR_PRESENT_POSITION = 132  # 현재 위치 주소
+    DXL_MINIMUM_POSITION_VALUE = 0  # 최소 위치 값
+    DXL_MAXIMUM_POSITION_VALUE = 4067  # 최대 위치 값
+    BAUDRATE = 57600  # 통신 속도
 
-PROTOCOL_VERSION = 2.0
-DXL_ID = 15
-DEVICENAME = '/dev/ttyUSB0'
-TORQUE_ENABLE = 1
-TORQUE_DISABLE = 0
+# 통신에 필요한 기본 설정
+PROTOCOL_VERSION = 2.0  # 프로토콜 버전
+DXL_ID = 15  # 제어할 Dynamixel ID
+DEVICENAME = '/dev/ttyUSB0'  # 포트 이름
+TORQUE_ENABLE = 1  # 토크 활성화 값
+TORQUE_DISABLE = 0  # 토크 비활성화 값
 VELOCITY_CW = 50  # 시계 방향 속도
 VELOCITY_CCW = -50  # 반시계 방향 속도
 VELOCITY_STOP = 0  # 모터 정지 속도
 
+# 포트와 패킷 핸들러 초기화
 portHandler = PortHandler(DEVICENAME)
 packetHandler = PacketHandler(PROTOCOL_VERSION)
 
+# 포트 열기
 if portHandler.openPort():
     print("Succeeded to open the port")
 else:
@@ -55,6 +58,7 @@ else:
     getch()
     quit()
 
+# Baudrate 설정
 if portHandler.setBaudRate(BAUDRATE):
     print("Succeeded to change the baudrate")
 else:
@@ -63,6 +67,7 @@ else:
     getch()
     quit()
 
+# 각 Dynamixel의 Wheel Mode 설정 및 토크 활성화
 for dxl_id in range(11, 16):
     dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_OPERATING_MODE, 1)
     if dxl_comm_result != COMM_SUCCESS:
@@ -80,20 +85,22 @@ for dxl_id in range(11, 16):
     else:
         print(f"Dynamixel has been successfully connected DXL_ID : {dxl_id}")
 
-# move 함수
-moving = False
-moving_dx_id = 11
-direction = VELOCITY_CW
-current_direction = VELOCITY_STOP
+# 모터를 제어하는 함수 관련 변수 설정
+moving = False  # 기본적으로 이동 중 아님
+moving_dx_id = 11  # 제어할 모터 ID
+direction = VELOCITY_CW  # 기본 방향 시계 방향
+current_direction = VELOCITY_STOP  # 현재 방향 정지 상태
 
-moving_forward = False
-moving_dx_id_12 = 12
-moving_dx_id_13 = 13
-direction_12 = VELOCITY_CW
-direction_13 = VELOCITY_CW
-current_direction_12 = VELOCITY_STOP
-current_direction_13 = VELOCITY_STOP
+# 두 모터를 동시에 제어하는 변수 설정
+moving_forward = False  # 전진 중 아님
+moving_dx_id_12 = 12  # 제어할 모터 ID
+moving_dx_id_13 = 13  # 제어할 모터 ID
+direction_12 = VELOCITY_CW  # 모터 12 시계 방향
+direction_13 = VELOCITY_CW  # 모터 13 시계 방향
+current_direction_12 = VELOCITY_STOP  # 모터 12 정지 상태
+current_direction_13 = VELOCITY_STOP  # 모터 13 정지 상태
 
+# 모터를 제어하는 함수
 def move_and_forward():
     global moving_dx_id, direction, current_direction
     global moving_dx_id_12, moving_dx_id_13
@@ -101,7 +108,7 @@ def move_and_forward():
     global current_direction_12, current_direction_13
     global moving, moving_forward
 
-    # 모터를 제어하는 하나의 통합된 함수
+    # 단일 모터 제어
     if moving:
         if current_direction != direction:
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, moving_dx_id, ADDR_GOAL_VELOCITY, direction)
@@ -123,6 +130,7 @@ def move_and_forward():
                 print(f"Stopped Dynamixel {moving_dx_id}.")
             current_direction = VELOCITY_STOP
 
+    # 두 모터 동시 제어
     if moving_forward:
         if current_direction_12 != direction_12:
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, moving_dx_id_12, ADDR_GOAL_VELOCITY, direction_12)
@@ -164,8 +172,7 @@ def move_and_forward():
                 print(f"Stopped Dynamixel {moving_dx_id_13}.")
             current_direction_13 = VELOCITY_STOP
 
-
-# 키 입력을 받는 curses 함수
+# 키보드 입력 처리 함수 (curses 사용)
 def main(stdscr):
     global moving, moving_forward
     global direction, direction_12, direction_13
@@ -233,4 +240,5 @@ for dxl_id in range(11, 16):
     elif dxl_error != 0:
         print("%s" % packetHandler.getRxPacketError(dxl_error))
 
+# 포트 닫기
 portHandler.closePort()
