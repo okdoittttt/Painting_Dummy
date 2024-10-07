@@ -155,40 +155,40 @@ def move_motor(motor_id: int, direction: str):
 @app.post("/move_dual_motors/{motor_id_1}/{direction_12}/{motor_id_2}/{direction_13}")
 def move_dual_motors(motor_id_1: int, direction_12: str, motor_id_2: int, direction_13: str):
     
-    # if direction_12 == 'cw':
-    #     vel_12 = VELOCITY_CW
-    # elif direction_12 == 'ccw':
-    #     vel_12 = VELOCITY_CCW
-    # elif direction_12 == 'stop':
-    #     vel_12 = VELOCITY_STOP
-    # else :
-    #     return {"error": "Invalid direction"}
+    if direction_12 == 'cw':
+        vel_12 = VELOCITY_CW
+    elif direction_12 == 'ccw':
+        vel_12 = VELOCITY_CCW
+    elif direction_12 == 'stop':
+        vel_12 = VELOCITY_STOP
+    else :
+        return {"error": "Invalid direction"}
 
-    # if direction_13 == 'cw':
-    #     vel_13 = VELOCITY_CW
-    # elif direction_13 == 'ccw':
-    #     vel_13 = VELOCITY_CCW
-    # elif direction_13 == 'stop':
-    #     vel_13 = VELOCITY_STOP
-    # else :
-    #     return {"error": "Invalid direction"}
+    if direction_13 == 'cw':
+        vel_13 = VELOCITY_CW
+    elif direction_13 == 'ccw':
+        vel_13 = VELOCITY_CCW
+    elif direction_13 == 'stop':
+        vel_13 = VELOCITY_STOP
+    else :
+        return {"error": "Invalid direction"}
 
-    # # Control motor 12
-    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, motor_id_1, ADDR_GOAL_VELOCITY, vel_12)
-    # if dxl_comm_result != COMM_SUCCESS:
-    #     return {"error": packetHandler.getTxRxResult(dxl_comm_result)}
-    # elif dxl_error != 0:
-    #     return {"error": packetHandler.getRxPacketError(dxl_error)}
+    # Control motor 12
+    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, motor_id_1, ADDR_GOAL_VELOCITY, vel_12)
+    if dxl_comm_result != COMM_SUCCESS:
+        return {"error": packetHandler.getTxRxResult(dxl_comm_result)}
+    elif dxl_error != 0:
+        return {"error": packetHandler.getRxPacketError(dxl_error)}
 
-    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, motor_id_2, ADDR_GOAL_VELOCITY, vel_13)
-    # if dxl_comm_result != COMM_SUCCESS:
-    #     return {"error": packetHandler.getTxRxResult(dxl_comm_result)}
-    # elif dxl_error != 0:
-    #     return {"error": packetHandler.getRxPacketError(dxl_error)}
+    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, motor_id_2, ADDR_GOAL_VELOCITY, vel_13)
+    if dxl_comm_result != COMM_SUCCESS:
+        return {"error": packetHandler.getTxRxResult(dxl_comm_result)}
+    elif dxl_error != 0:
+        return {"error": packetHandler.getRxPacketError(dxl_error)}
     
-    # packetHandler.write4ByteTxRx(portHandler, moving_dx_id_12, ADDR_GOAL_VELOCITY, vel_12)
-    # # Control motor 13
-    # packetHandler.write4ByteTxRx(portHandler, moving_dx_id_13, ADDR_GOAL_VELOCITY, vel_13)
+    packetHandler.write4ByteTxRx(portHandler, moving_dx_id_12, ADDR_GOAL_VELOCITY, vel_12)
+    # Control motor 13
+    packetHandler.write4ByteTxRx(portHandler, moving_dx_id_13, ADDR_GOAL_VELOCITY, vel_13)
 
     return {"message": f"Motors 12 and 13 moved. 12 to {direction_12}, 13 to {direction_13}"}
 
