@@ -139,15 +139,24 @@ else:
     print("Press any key to terminate...")
     getch()
     quit()
+ADDR_OPERATING_MODE = 11  # 운영 모드 설정 주소
+# 각 Dynamixel의 Wheel Mode 설정 및 토크 활성화
+for dxl_id in range(11, 16):
+    dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_OPERATING_MODE, 3)
+    if dxl_comm_result != COMM_SUCCESS:
+        print(f"Failed to set wheel mode: {packetHandler.getTxRxResult(dxl_comm_result)}")
+    elif dxl_error != 0:
+        print(f"Error while setting wheel mode: {packetHandler.getRxPacketError(dxl_error)}")
+    else:
+        print(f"Dynamixel {dxl_id} is in Wheel Mode.")
 
-# Enable Dynamixel Torque
-dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL_ID, ADDR_TORQUE_ENABLE, TORQUE_ENABLE)
-if dxl_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-elif dxl_error != 0:
-    print("%s" % packetHandler.getRxPacketError(dxl_error))
-else:
-    print("Dynamixel has been successfully connected")
+    dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_TORQUE_ENABLE, TORQUE_ENABLE)
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error))
+    else:
+        print(f"Dynamixel has been successfully connected DXL_ID : {dxl_id}")
 
 while 1:
     print("Press any key to continue! (or press ESC to quit!)")

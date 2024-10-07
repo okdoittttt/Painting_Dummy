@@ -67,8 +67,18 @@ else:
     getch()
     quit()
 
+for dxl_id in range(11,16):
+    dxl_comm_result, dxl_error = packetHandler.reboot(portHandler, dxl_id)
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error))
+
+    print("[ID:%03d] reboot Succeeded\n" % dxl_id)
+
+
 # 각 Dynamixel의 Wheel Mode 설정 및 토크 활성화
-for dxl_id in range(11, 16):
+for dxl_id in range(10, 16):
     dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, dxl_id, ADDR_OPERATING_MODE, 1)
     if dxl_comm_result != COMM_SUCCESS:
         print(f"Failed to set wheel mode: {packetHandler.getTxRxResult(dxl_comm_result)}")
@@ -85,6 +95,8 @@ for dxl_id in range(11, 16):
     else:
         print(f"Dynamixel has been successfully connected DXL_ID : {dxl_id}")
 
+    
+
 # 모터를 제어하는 함수 관련 변수 설정
 moving = False  # 기본적으로 이동 중 아님
 moving_dx_id = 11  # 제어할 모터 ID
@@ -99,6 +111,7 @@ direction_12 = VELOCITY_CW  # 모터 12 시계 방향
 direction_13 = VELOCITY_CW  # 모터 13 시계 방향
 current_direction_12 = VELOCITY_STOP  # 모터 12 정지 상태
 current_direction_13 = VELOCITY_STOP  # 모터 13 정지 상태
+
 
 # 모터를 제어하는 함수
 def move_and_forward():
@@ -132,6 +145,7 @@ def move_and_forward():
 
     # 두 모터 동시 제어
     if moving_forward:
+        print(f"Current Position: {check_motor_position(12)}")
         if current_direction_12 != direction_12:
             dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, moving_dx_id_12, ADDR_GOAL_VELOCITY, direction_12)
             if dxl_comm_result != COMM_SUCCESS:
@@ -172,6 +186,80 @@ def move_and_forward():
                 print(f"Stopped Dynamixel {moving_dx_id_13}.")
             current_direction_13 = VELOCITY_STOP
 
+def check_motor_position(moving_dx_id) :
+    dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, moving_dx_id, ADDR_PRESENT_POSITION)
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    elif dxl_error != 0:
+        print("%s" % packetHandler.getRxPacketError(dxl_error))
+    print(f"Current Position : {dxl_present_position}.")
+    return dxl_present_position
+    
+
+def initiallize_poze(dx_id) :
+    move_to_front=VELOCITY_CCW
+    move_to_back=VELOCITY_CW
+    check_current_poze_start = 200
+    check_current_poze_end = 2000
+    limit_range_start_to_front = 0
+    limit_range_end_to_front = 10
+    limit_range_start_to_back = 4000
+    limit_range_end_to_back = 4010
+    
+    if (dx_id == 13) :
+        move_to_front=VELOCITY_CW
+        move_to_back=VELOCITY_CCW
+        check_current_poze_start = 0
+        check_current_poze_end = 910
+        limit_range_start_to_front = 929
+        limit_range_end_to_front = 939
+        limit_range_start_to_back = 929
+        limit_range_end_to_back = 939
+
+    if check_current_poze_start <= check_motor_position(dx_id) <= check_current_poze_end :
+        while True :
+            dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, dx_id, ADDR_GOAL_VELOCITY, move_to_front)
+            if dxl_comm_result != COMM_SUCCESS:
+                print(f"Failed to set velocity: {packetHandler.getTxRxResult(dxl_comm_result)}")
+            elif dxl_error != 0:
+                print(f"Error while setting velocity: {packetHandler.getRxPacketError(dxl_error)}")
+            else :
+                print(f"Moving {dx_id} CCW...")
+
+            if limit_range_start_to_front <= check_motor_position(dx_id) <= limit_range_end_to_front :
+                dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, dx_id, ADDR_GOAL_VELOCITY, 0)
+                if dxl_comm_result != COMM_SUCCESS:
+                    print(f"Failed to set velocity: {packetHandler.getTxRxResult(dxl_comm_result)}")
+                elif dxl_error != 0:
+                    print(f"Error while setting velocity: {packetHandler.getRxPacketError(dxl_error)}")
+                else :
+                    print(f"STOP {dx_id} CCW!!")
+                break
+            
+
+    elif check_current_poze_end < check_motor_position(dx_id) :
+        while True :
+            dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, dx_id, ADDR_GOAL_VELOCITY, move_to_back)
+            if dxl_comm_result != COMM_SUCCESS:
+                print(f"Failed to set velocity: {packetHandler.getTxRxResult(dxl_comm_result)}")
+            elif dxl_error != 0:
+                print(f"Error while setting velocity: {packetHandler.getRxPacketError(dxl_error)}")
+            else :
+                print(f"Moving {dx_id} CW...")
+
+            if limit_range_start_to_back <= check_motor_position(dx_id) <= limit_range_end_to_back :
+                dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, dx_id, ADDR_GOAL_VELOCITY, 0)
+                if dxl_comm_result != COMM_SUCCESS:
+                    print(f"Failed to set velocity: {packetHandler.getTxRxResult(dxl_comm_result)}")
+                elif dxl_error != 0:
+                    print(f"Error while setting velocity: {packetHandler.getRxPacketError(dxl_error)}")
+                else :
+                    print(f"STOP {dx_id} CW!!")
+
+                break
+            # time.sleep(0.1)
+            
+
 # 키보드 입력 처리 함수 (curses 사용)
 def main(stdscr):
     global moving, moving_forward
@@ -182,6 +270,12 @@ def main(stdscr):
     stdscr.clear()
     stdscr.addstr(0, 0, "Press 'p' to move left, 'o' to move right, release to stop.")
     stdscr.refresh()
+    stdscr.addstr(1,0, str(check_motor_position(13)))
+    
+    
+    initiallize_poze(12)
+    initiallize_poze(11)
+    initiallize_poze(13)
 
     while True:
         key = stdscr.getch()
