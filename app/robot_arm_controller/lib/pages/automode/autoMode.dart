@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
+import 'package:http/http.dart' as http;
 
 class AutoMode extends StatefulWidget {
   const AutoMode({super.key});
@@ -12,6 +13,63 @@ class AutoMode extends StatefulWidget {
 class _AutoModeState extends State<AutoMode> {
   // 로봇 데이터를 받은 후 아래 화면에 사용
   String robotsName = 'Open MANIPULATOR-X';
+  String _statusMessage = '자동 제어 시작';
+
+  Future<void> sendRequest() async {
+    final url = Uri.parse('http://192.168.0.11:8000/move_motor/11/cw');
+    setState(() {
+      _statusMessage = '요청 중...';
+      print('요청중 신호 확인');
+    });
+
+    try {
+      final reponse = await http.post(url);
+      if (reponse.statusCode == 200) {
+        setState(() {
+          _statusMessage = '요청 성공';
+          print('요청성공 신호 확인');
+        });
+      } else {
+        setState(() {
+          _statusMessage = '요청 실패: ${reponse.statusCode}';
+          print('요청실패 신호 확인 ${reponse.statusCode}');
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _statusMessage = '에러 발생 $e';
+        print('에러발생 신호 확인 $e');
+      });
+    }
+  }
+
+  Future<void> sendRequestStop() async {
+    final url = Uri.parse('http://192.168.0.11:8000/13/stop');
+    setState(() {
+      _statusMessage = '요청 중...';
+      print('요청중 신호 확인(정지)');
+    });
+
+    try {
+      final reponse = await http.post(url);
+      if (reponse.statusCode == 200) {
+        setState(() {
+          _statusMessage = '요청 성공';
+          print('요청성공 신호 확인(정지)');
+        });
+      } else {
+        setState(() {
+          _statusMessage = '요청 실패: ${reponse.statusCode}';
+          print('요청실패 신호 확인 ${reponse.statusCode}(정지)');
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _statusMessage = '에러 발생 $e';
+        print('에러발생 신호 확인 $e(정지)');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,80 +210,86 @@ class _AutoModeState extends State<AutoMode> {
                                       verticalDirection: VerticalDirection.down,
                                       clipBehavior: Clip.none,
                                       children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.4,
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(100, 196, 196, 196),
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(12),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .brightness_high,
-                                                  color: Colors.orange,
-                                                  size: 44,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 12, 0, 4),
-                                                  child: Text(
-                                                    '자동 제어 시작',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(color: Colors.black, fontSize: 18),
+                                        GestureDetector(
+                                          onTap: () => sendRequest(),
+                                          child: Container(
+                                            width:
+                                                MediaQuery.sizeOf(context).width *
+                                                    0.4,
+                                            height: 160,
+                                            decoration: BoxDecoration(
+                                              color: Color.fromARGB(100, 196, 196, 196),
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .brightness_high,
+                                                    color: Colors.orange,
+                                                    size: 44,
                                                   ),
-                                                ),
-                                              ],
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional
+                                                        .fromSTEB(0, 12, 0, 4),
+                                                    child: Text(
+                                                      '자동 제어 시작',
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(color: Colors.black, fontSize: 18),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.4,
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(100, 196, 196, 196),
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(12),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .brightness_low,
-                                                  color: Colors.orange,
-                                                  size: 44,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 12, 0, 4),
-                                                  child: Text(
-                                                    '동작 초기화',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      letterSpacing: 0.0,
-                                                      color: Colors.black,
-                                                      fontSize: 18,
+                                        GestureDetector(
+                                          onTap: () => sendRequestStop(),
+                                          child: Container(
+                                            width:
+                                                MediaQuery.sizeOf(context).width *
+                                                    0.4,
+                                            height: 160,
+                                            decoration: BoxDecoration(
+                                              color: Color.fromARGB(100, 196, 196, 196),
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .brightness_low,
+                                                    color: Colors.orange,
+                                                    size: 44,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional
+                                                        .fromSTEB(0, 12, 0, 4),
+                                                    child: Text(
+                                                      '동작 초기화',
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Urbanist',
+                                                        letterSpacing: 0.0,
+                                                        color: Colors.black,
+                                                        fontSize: 18,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
