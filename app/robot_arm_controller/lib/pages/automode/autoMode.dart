@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 import 'package:http/http.dart' as http;
+import '../manualmode/ManualMoveControll.dart';
 
 class AutoMode extends StatefulWidget {
   const AutoMode({super.key});
@@ -16,59 +17,28 @@ class _AutoModeState extends State<AutoMode> {
   String _statusMessage = '자동 제어 시작';
 
   Future<void> sendRequest() async {
-    final url = Uri.parse('http://192.168.0.11:8000/move_motor/11/cw');
+    final HttpService httpService =
+        HttpService('http://192.168.0.11:8000/move_motor/11/ccw');
     setState(() {
-      _statusMessage = '요청 중...';
-      print('요청중 신호 확인');
+      _statusMessage = '요청 중 ...';
     });
 
-    try {
-      final reponse = await http.post(url);
-      if (reponse.statusCode == 200) {
-        setState(() {
-          _statusMessage = '요청 성공';
-          print('요청성공 신호 확인');
-        });
-      } else {
-        setState(() {
-          _statusMessage = '요청 실패: ${reponse.statusCode}';
-          print('요청실패 신호 확인 ${reponse.statusCode}');
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _statusMessage = '에러 발생 $e';
-        print('에러발생 신호 확인 $e');
-      });
-    }
+    final result = await httpService.sendRequest();
+    setState(() {
+      _statusMessage = result;
+    });
   }
-
+  
   Future<void> sendRequestStop() async {
-    final url = Uri.parse('http://192.168.0.11:8000/13/stop');
+    final HttpService httpService = HttpService('http://192.168.0.11:8000/move_motor/11/stop');
     setState(() {
-      _statusMessage = '요청 중...';
-      print('요청중 신호 확인(정지)');
+      _statusMessage = '정지 중 ...';
     });
 
-    try {
-      final reponse = await http.post(url);
-      if (reponse.statusCode == 200) {
-        setState(() {
-          _statusMessage = '요청 성공';
-          print('요청성공 신호 확인(정지)');
-        });
-      } else {
-        setState(() {
-          _statusMessage = '요청 실패: ${reponse.statusCode}';
-          print('요청실패 신호 확인 ${reponse.statusCode}(정지)');
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _statusMessage = '에러 발생 $e';
-        print('에러발생 신호 확인 $e(정지)');
-      });
-    }
+    final result = await httpService.sendRequest();
+    setState(() {
+      _statusMessage = result;
+    });
   }
 
   @override
@@ -192,7 +162,8 @@ class _AutoModeState extends State<AutoMode> {
                               children: [
                                 Text(
                                   'Select Function',
-                                  style: TextStyle(color: Colors.black, fontSize: 18),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
                                 ),
                                 Align(
                                   alignment: AlignmentDirectional(0, 0),
@@ -213,12 +184,13 @@ class _AutoModeState extends State<AutoMode> {
                                         GestureDetector(
                                           onTap: () => sendRequest(),
                                           child: Container(
-                                            width:
-                                                MediaQuery.sizeOf(context).width *
-                                                    0.4,
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.4,
                                             height: 160,
                                             decoration: BoxDecoration(
-                                              color: Color.fromARGB(100, 196, 196, 196),
+                                              color: Color.fromARGB(
+                                                  100, 196, 196, 196),
                                               borderRadius:
                                                   BorderRadius.circular(24),
                                             ),
@@ -230,18 +202,22 @@ class _AutoModeState extends State<AutoMode> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(
-                                                    Icons
-                                                        .brightness_high,
+                                                    Icons.brightness_high,
                                                     color: Colors.orange,
                                                     size: 44,
                                                   ),
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 12, 0, 4),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 12, 0, 4),
                                                     child: Text(
                                                       '자동 제어 시작',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(color: Colors.black, fontSize: 18),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 18),
                                                     ),
                                                   ),
                                                 ],
@@ -252,12 +228,13 @@ class _AutoModeState extends State<AutoMode> {
                                         GestureDetector(
                                           onTap: () => sendRequestStop(),
                                           child: Container(
-                                            width:
-                                                MediaQuery.sizeOf(context).width *
-                                                    0.4,
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.4,
                                             height: 160,
                                             decoration: BoxDecoration(
-                                              color: Color.fromARGB(100, 196, 196, 196),
+                                              color: Color.fromARGB(
+                                                  100, 196, 196, 196),
                                               borderRadius:
                                                   BorderRadius.circular(24),
                                             ),
@@ -269,17 +246,19 @@ class _AutoModeState extends State<AutoMode> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(
-                                                    Icons
-                                                        .brightness_low,
+                                                    Icons.brightness_low,
                                                     color: Colors.orange,
                                                     size: 44,
                                                   ),
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 12, 0, 4),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 12, 0, 4),
                                                     child: Text(
                                                       '동작 초기화',
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                         fontFamily: 'Urbanist',
                                                         letterSpacing: 0.0,
@@ -299,7 +278,8 @@ class _AutoModeState extends State<AutoMode> {
                                                   0.4,
                                           height: 160,
                                           decoration: BoxDecoration(
-                                            color: Color.fromARGB(100, 196, 196, 196),
+                                            color: Color.fromARGB(
+                                                100, 196, 196, 196),
                                             borderRadius:
                                                 BorderRadius.circular(24),
                                           ),
@@ -311,8 +291,7 @@ class _AutoModeState extends State<AutoMode> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  Icons
-                                                      .do_not_disturb_alt,
+                                                  Icons.do_not_disturb_alt,
                                                   color: Colors.orange,
                                                   size: 44,
                                                 ),
@@ -340,7 +319,8 @@ class _AutoModeState extends State<AutoMode> {
                                                   0.4,
                                           height: 160,
                                           decoration: BoxDecoration(
-                                            color: Color.fromARGB(100, 196, 196, 196),
+                                            color: Color.fromARGB(
+                                                100, 196, 196, 196),
                                             borderRadius:
                                                 BorderRadius.circular(24),
                                           ),
@@ -352,8 +332,7 @@ class _AutoModeState extends State<AutoMode> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  Icons
-                                                      .model_training,
+                                                  Icons.model_training,
                                                   color: Colors.orange,
                                                   size: 44,
                                                 ),
