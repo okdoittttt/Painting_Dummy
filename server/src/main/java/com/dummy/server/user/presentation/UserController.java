@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인" ,description = "")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new CustomUsernamePasswordAuthenticationToken(
