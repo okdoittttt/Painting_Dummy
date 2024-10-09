@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
+import 'package:robot_arm_controller/pages/manualmode/appControlURL.dart';
 import 'package:robot_arm_controller/pages/manualmode/ball.dart';
 import 'package:robot_arm_controller/pages/manualmode/ballProperties.dart';
 import 'package:robot_arm_controller/pages/manualmode/joysticModeDropdown.dart';
@@ -19,6 +20,8 @@ class _JoystickExampleState extends State<BasicJoystick> {
   // JoystickMode _joystickMode = JoystickMode.all;
   String _statusMessage = '자동 제어 시작';
 
+  // =======================================================
+  // 움직임 동작 확인 테스트 코드
   // 조이스틱 움직임에 따른 함수 동작 예제 구현
   void moveUp() {
     print('Move Up');
@@ -35,8 +38,9 @@ class _JoystickExampleState extends State<BasicJoystick> {
   void moveStop() {
     print('Move Stop');
   }
-  Future<void> sendRequestStop() async {
-    final HttpService httpService = HttpService('http://192.168.0.11:8000/move_motor/11/stop');
+  // =======================================================
+  Future<void> sendRequest(String url) async {
+    final HttpService httpService = HttpService(url);
     setState(() {
       _statusMessage = '정지 중 ...';
     });
@@ -45,9 +49,8 @@ class _JoystickExampleState extends State<BasicJoystick> {
     setState(() {
       _statusMessage = result;
     });
-    print('Move Stop');
   }
-  // 조이스틱 움직임에 따른 함수 동작 예제 구현
+  // =======================================================
 
   @override
   void didChangeDependencies() {
@@ -82,15 +85,19 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   // 조이스틱 방향에 따른 동작
                   if (details.y > 0.5) {
                     moveDown();
+                    sendRequest(AppControlURL.requestDown);
                   } else if (details.y < -0.5) {
                     moveUp();
+                    sendRequest(AppControlURL.requestUp);
                   } else if (details.x > 0.5) {
                     moveRight();
+                    sendRequest(AppControlURL.requestRight);
                   } else if (details.x < -0.5) {
                     moveLeft();
+                    sendRequest(AppControlURL.requestLeft);
                   } else if (details.x == 0 || details.y == 0) {
                     moveStop();
-                    sendRequestStop();
+                    sendRequest(AppControlURL.requestStop);
                   }
                 },
               ),
