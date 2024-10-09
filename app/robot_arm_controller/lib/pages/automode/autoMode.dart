@@ -15,19 +15,6 @@ class _AutoModeState extends State<AutoMode> {
   // 로봇 데이터를 받은 후 아래 화면에 사용
   String robotsName = 'Open MANIPULATOR-X';
   String _statusMessage = '자동 제어 시작';
-
-  Future<void> sendRequest() async {
-    final HttpService httpService =
-        HttpService('http://192.168.0.11:8000/move_motor/11/ccw');
-    setState(() {
-      _statusMessage = '요청 중 ...';
-    });
-
-    final result = await httpService.sendRequest();
-    setState(() {
-      _statusMessage = result;
-    });
-  }
   
   Future<void> sendRequestStop() async {
     final HttpService httpService = HttpService('http://192.168.0.11:8000/move_motor/11/stop');
@@ -181,8 +168,9 @@ class _AutoModeState extends State<AutoMode> {
                                       verticalDirection: VerticalDirection.down,
                                       clipBehavior: Clip.none,
                                       children: [
+                                        // 자동 제어 모드 구현 후 사용
                                         GestureDetector(
-                                          onTap: () => sendRequest(),
+                                          // onTap: () => sendRequest(),
                                           child: Container(
                                             width: MediaQuery.sizeOf(context)
                                                     .width *
