@@ -18,6 +18,9 @@ public class User {
     @Column(name = "userid", updatable = false, nullable = false)
     private Long id;
 
+    @Column(name = "employee_number", nullable = false, unique = true)
+    private String employeeNumber;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -28,7 +31,8 @@ public class User {
     private String nickname;
 
     @Builder
-    public User(String email, String password, String nickname) {
+    public User(String email, String password, String nickname, String employeeNumber) {
+        this.employeeNumber = employeeNumber;
         this.email = email;
         this.password = password;
         this.nickname = nickname;

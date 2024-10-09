@@ -23,6 +23,7 @@ public class UserService {
             throw new BadRequestException("Nickname already in use.");
 
         User newUser = User.builder()
+                .employeeNumber(registrationDto.employeeNumber())
                 .email(registrationDto.email())
                 .password(passwordEncoder.encode(registrationDto.password()))
                 .nickname(registrationDto.nickname())
@@ -37,6 +38,7 @@ public class UserService {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new BadRequestException("토큰 확인해보십쇼"));
         return UserProfileResponse.builder()
+                .employeeNumber(user.getEmployeeNumber())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .build();

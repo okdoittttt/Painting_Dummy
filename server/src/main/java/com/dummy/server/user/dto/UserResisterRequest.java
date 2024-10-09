@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 public record UserResisterRequest(
         @NotBlank
+        String employeeNumber,
+        @NotBlank
         @Email
         String email,
         @NotBlank
