@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_arm_controller/pages/join/joinService.dart';
+import 'package:robot_arm_controller/pages/join/user.dart';
 import 'package:robot_arm_controller/pages/login/login.dart';
+import 'package:http/http.dart' as http;
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -10,6 +15,12 @@ class JoinPage extends StatefulWidget {
 }
 
 class _JoinPageState extends State<JoinPage> {
+
+  String employeeNumber = '';
+  String password = '';
+  String nickname = '';
+  String email = '';
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +110,11 @@ class _JoinPageState extends State<JoinPage> {
                             Expanded(
                                 child: TextFormField(
                                   keyboardType: TextInputType.text,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      employeeNumber = val;
+                                    });
+                                  },
                                   decoration: InputDecoration(
                                     labelText: 'Employee number',
                                     hintText: 'Enter your Employee number here...',
@@ -128,6 +144,11 @@ class _JoinPageState extends State<JoinPage> {
                             Expanded(
                               child: TextFormField(
                                 keyboardType: TextInputType.visiblePassword,
+                                onChanged: (val) {
+                                  setState(() {
+                                    password = val;
+                                  });
+                                },
                                 obscureText: true,
                                 decoration: InputDecoration(
                                   labelText: 'Password',
@@ -188,6 +209,11 @@ class _JoinPageState extends State<JoinPage> {
                             Expanded(
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
+                                onChanged: (val) {
+                                  setState(() {
+                                    nickname = val;
+                                  });
+                                },
                                 decoration: InputDecoration(
                                   labelText: 'Name',
                                   hintText: 'Enter your Name here...',
@@ -217,6 +243,11 @@ class _JoinPageState extends State<JoinPage> {
                             Expanded(
                               child: TextFormField(
                                 keyboardType: TextInputType.emailAddress,
+                                onChanged: (val) {
+                                  setState(() {
+                                    email = val;
+                                  });
+                                },
                                 decoration: InputDecoration(
                                   labelText: 'Email',
                                   hintText: 'Enter your Email here...',
@@ -266,6 +297,8 @@ class _JoinPageState extends State<JoinPage> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
+                                  JoinService joinservice = JoinService();
+                                  joinservice.signUp(employeeNumber, email, nickname, password);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.orange, // 배경색을 파란색으로 설정
@@ -275,7 +308,7 @@ class _JoinPageState extends State<JoinPage> {
                                       fontWeight:
                                       FontWeight.w900), // 글자를 굵게(볼드) 설정
                                 ),
-                                child: Text("Login"),
+                                child: Text("Join"),
                               ),
                             ),
                           ],
