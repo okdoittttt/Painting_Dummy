@@ -47,6 +47,7 @@ class _JoystickExampleState extends State<BasicJoystick> {
 
     final result = await httpService.sendRequest();
     setState(() {
+      // 전송에 성공한 경우 모달 혹은 알림 창을 출력하도록 변경 예정.
       _statusMessage = result;
     });
   }
