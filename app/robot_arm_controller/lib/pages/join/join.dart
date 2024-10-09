@@ -1,11 +1,6 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/join/joinService.dart';
-import 'package:robot_arm_controller/pages/join/user.dart';
 import 'package:robot_arm_controller/pages/login/login.dart';
-import 'package:http/http.dart' as http;
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -15,12 +10,11 @@ class JoinPage extends StatefulWidget {
 }
 
 class _JoinPageState extends State<JoinPage> {
-
   String employeeNumber = '';
   String password = '';
   String nickname = '';
   String email = '';
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +94,9 @@ class _JoinPageState extends State<JoinPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                         child: Row(
@@ -108,29 +104,29 @@ class _JoinPageState extends State<JoinPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                                child: TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      employeeNumber = val;
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                    labelText: 'Employee number',
-                                    hintText: 'Enter your Employee number here...',
-                                    labelStyle: TextStyle(
-                                        color: Colors.black), // 레이블 텍스트 색상
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color:
-                                          Colors.orange), // 포커스 시 테두리 색상
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey), // 비활성화 시 테두리 색상
-                                    ),
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                onChanged: (val) {
+                                  setState(() {
+                                    employeeNumber = val;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Employee number',
+                                  hintText:
+                                      'Enter your Employee number here...',
+                                  labelStyle: TextStyle(
+                                      color: Colors.black), // 레이블 텍스트 색상
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.orange), // 포커스 시 테두리 색상
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey), // 비활성화 시 테두리 색상
                                   ),
                                 ),
+                              ),
                             ),
                           ],
                         ),
@@ -157,8 +153,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.black), // 레이블 텍스트 색상
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                        Colors.orange), // 포커스 시 테두리 색상
+                                        color: Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -187,8 +182,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.black), // 레이블 텍스트 색상
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                        Colors.orange), // 포커스 시 테두리 색상
+                                        color: Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -221,8 +215,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.black), // 레이블 텍스트 색상
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                        Colors.orange), // 포커스 시 테두리 색상
+                                        color: Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -255,8 +248,7 @@ class _JoinPageState extends State<JoinPage> {
                                       color: Colors.black), // 레이블 텍스트 색상
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                        Colors.orange), // 포커스 시 테두리 색상
+                                        color: Colors.orange), // 포커스 시 테두리 색상
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -278,17 +270,20 @@ class _JoinPageState extends State<JoinPage> {
                               flex: 5, // 첫 번째 버튼의 비율
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginPage()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
                                   foregroundColor: Colors.black,
                                   elevation: 0,
                                 ),
-                                child: Text("Already have an account? Login",
-                                style: TextStyle(
-                                  color: Colors.grey
-                                ),),
+                                child: Text(
+                                  "Already have an account? Login",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                             ),
                             SizedBox(width: 16), // 간격 조절을 위한 SizedBox 추가
@@ -298,15 +293,17 @@ class _JoinPageState extends State<JoinPage> {
                                 onPressed: () {
                                   // Navigator.push(context, MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                   JoinService joinservice = JoinService();
-                                  joinservice.signUp(employeeNumber, email, nickname, password);
+                                  joinservice.signUp(employeeNumber, email,
+                                      nickname, password);
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orange, // 배경색을 파란색으로 설정
+                                  backgroundColor:
+                                      Colors.orange, // 배경색을 파란색으로 설정
                                   foregroundColor:
-                                  Colors.white, // 텍스트 색상을 흰색으로 설정
+                                      Colors.white, // 텍스트 색상을 흰색으로 설정
                                   textStyle: TextStyle(
                                       fontWeight:
-                                      FontWeight.w900), // 글자를 굵게(볼드) 설정
+                                          FontWeight.w900), // 글자를 굵게(볼드) 설정
                                 ),
                                 child: Text("Join"),
                               ),
