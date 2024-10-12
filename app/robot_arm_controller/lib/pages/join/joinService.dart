@@ -4,7 +4,7 @@ import 'package:robot_arm_controller/pages/join/user.dart';
 import 'package:http/http.dart' as http;
 
 class JoinService {
-  Future<void> signUp(String employeeNumber, String email, String nickname,
+  Future<int> signUp(String employeeNumber, String email, String nickname,
       String password) async {
     final user = User(
         employeeNumber: employeeNumber,
@@ -25,12 +25,12 @@ class JoinService {
       );
 
       if (response.statusCode == 200) {
-        print('회원가입 성공');
+        return response.statusCode;
       } else {
-        print('회원가입 실패: ${response.body}');
+        return response.statusCode;
       }
     } catch (e) {
-      print('오류 발생: ${e}');
+      return 400;
     }
   }
 }

@@ -291,10 +291,37 @@ class _JoinPageState extends State<JoinPage> {
                               flex: 5,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                   JoinService joinservice = JoinService();
-                                  joinservice.signUp(employeeNumber, email,
-                                      nickname, password);
+
+                                  joinservice
+                                      .signUp(employeeNumber, email, nickname,
+                                          password)
+                                      .then((result) {
+                                    if (result == 200) {
+                                      showDialog(context: context, builder: (context) => AlertDialog(
+                                        title: Text('회원가입 성공'),
+                                        backgroundColor: Colors.orange,
+                                        titleTextStyle: TextStyle(color: Colors.white),
+                                        contentTextStyle: TextStyle(color: Colors.white),
+                                      ));
+                                      Future.delayed(Duration(seconds: 2), () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                                      });
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('잘못된 정보입니다.'),
+                                        ),
+                                      );
+                                    }
+                                  }).catchError((error) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('회원가입 실패: $error'),
+                                      ),
+                                    );
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
