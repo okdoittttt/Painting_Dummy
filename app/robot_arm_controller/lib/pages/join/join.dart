@@ -298,12 +298,35 @@ class _JoinPageState extends State<JoinPage> {
                                           password)
                                       .then((result) {
                                     if (result == 200) {
-                                      showDialog(context: context, builder: (context) => AlertDialog(
-                                        title: Text('회원가입 성공'),
-                                        backgroundColor: Colors.orange,
-                                        titleTextStyle: TextStyle(color: Colors.white),
-                                        contentTextStyle: TextStyle(color: Colors.white),
-                                      ));
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          backgroundColor: Colors.orange,
+                                          title: Text(
+                                            '회원가입 성공',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            '회원가입이 완료되었습니다. 로그인하여 이용해주세요.',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context); // 다이얼로그 닫기
+                                              },
+                                              child: Text('확인'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                       Future.delayed(Duration(seconds: 2), () {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                                       });
