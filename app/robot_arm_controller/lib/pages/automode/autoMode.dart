@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 import 'package:http/http.dart' as http;
-import '../manualmode/ManualMoveControll.dart';
+import '../manualmode/manualModeService.dart';
 
 class AutoMode extends StatefulWidget {
   const AutoMode({super.key});
