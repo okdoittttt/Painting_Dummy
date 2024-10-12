@@ -5,7 +5,7 @@ import 'package:robot_arm_controller/pages/manualmode/ball.dart';
 import 'package:robot_arm_controller/pages/manualmode/ballProperties.dart';
 import 'package:robot_arm_controller/pages/manualmode/joysticModeDropdown.dart';
 
-import 'ManualMoveControll.dart';
+import 'manualModeService.dart';
 
 BallProperties properties = BallProperties();
 
@@ -48,6 +48,18 @@ class _JoystickExampleState extends State<BasicJoystick> {
     final result = await httpService.sendRequest();
     setState(() {
       // 전송에 성공한 경우 모달 혹은 알림 창을 출력하도록 변경 예정.
+      _statusMessage = result;
+    });
+  }
+
+  Future<void> sendRequestStop(String url) async {
+    final HttpService httpService = HttpService(url);
+    setState(() {
+      _statusMessage = '정지 중 ...';
+    });
+
+    final result = await httpService.sendRequestStop();
+    setState(() {
       _statusMessage = result;
     });
   }
@@ -98,7 +110,7 @@ class _JoystickExampleState extends State<BasicJoystick> {
                     sendRequest(AppControlURL.requestLeft);
                   } else if (details.x == 0 || details.y == 0) {
                     moveStop();
-                    sendRequest(AppControlURL.requestStop);
+                    sendRequestStop(AppControlURL.requestStop);
                   }
                 },
               ),
