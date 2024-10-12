@@ -26,18 +26,23 @@ class _JoystickExampleState extends State<BasicJoystick> {
   void moveUp() {
     print('Move Up');
   }
+
   void moveDown() {
     print('Move Down');
   }
+
   void moveLeft() {
     print('Move Left');
   }
+
   void moveRight() {
     print('Move Right');
   }
+
   void moveStop() {
     print('Move Stop');
   }
+
   // =======================================================
   Future<void> sendRequest(String url) async {
     final HttpService httpService = HttpService(url);
@@ -75,21 +80,43 @@ class _JoystickExampleState extends State<BasicJoystick> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        // 상하좌우만 동작하도록 구현, 만약 다른 방향 동작이 필요할 때 추석해제 하면 됨.
-        // actions: [
-        //   JoystickModeDropdown(
-        //     mode: _joystickMode,
-        //     onChanged: (JoystickMode value) {
-        //       setState(() {
-        //         _joystickMode = value;
-        //       });
-        //     },
-        //   ),
-        // ],
-      ),
+          // 상하좌우만 동작하도록 구현, 만약 다른 방향 동작이 필요할 때 추석해제 하면 됨.
+          // actions: [
+          //   JoystickModeDropdown(
+          //     mode: _joystickMode,
+          //     onChanged: (JoystickMode value) {
+          //       setState(() {
+          //         _joystickMode = value;
+          //       });
+          //     },
+          //   ),
+          // ],
+          ),
       body: SafeArea(
-        child: Stack(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            ElevatedButton(
+                onPressed: () {
+                  sendRequest(AppControlURL.requestGO);
+                },
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.orange,
+                    minimumSize: Size(100, 50)),
+                child: Text('전진')),
+            SizedBox(
+              width: 10,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  sendRequest(AppControlURL.requestBack);
+                },
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.orange,
+                    minimumSize: Size(100, 50)),
+                child: Text('후진')),
             Align(
               alignment: const Alignment(0, 0.8),
               child: Joystick(
