@@ -98,25 +98,25 @@ class _JoystickExampleState extends State<BasicJoystick> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  sendRequest(AppControlURL.requestGO);
+                  sendRequest(AppControlURL.requestUp);
                 },
                 style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.orange,
                     minimumSize: Size(100, 50)),
-                child: Text('전진')),
+                child: Text('상승')),
             SizedBox(
               width: 10,
             ),
             ElevatedButton(
                 onPressed: () {
-                  sendRequest(AppControlURL.requestBack);
+                  sendRequest(AppControlURL.requestDown);
                 },
                 style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.orange,
                     minimumSize: Size(100, 50)),
-                child: Text('후진')),
+                child: Text('하강')),
             Align(
               alignment: const Alignment(0, 0.8),
               child: Joystick(
@@ -125,10 +125,10 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   // 조이스틱 방향에 따른 동작
                   if (details.y > 0.5) {
                     moveDown();
-                    sendRequest(AppControlURL.requestDown);
+                    sendRequest(AppControlURL.requestBack);
                   } else if (details.y < -0.5) {
                     moveUp();
-                    sendRequest(AppControlURL.requestUp);
+                    sendRequest(AppControlURL.requestGO);
                   } else if (details.x > 0.5) {
                     moveRight();
                     sendRequest(AppControlURL.requestRight);
