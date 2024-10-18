@@ -12,7 +12,7 @@ class JoinService {
         nickname: nickname,
         password: password);
 
-    final signUpURL =
+    String signUpURL =
         'https://port-0-painting-dummy-lyqylohp8957ca6e.sel5.cloudtype.app/api/users/signup';
 
     try {
