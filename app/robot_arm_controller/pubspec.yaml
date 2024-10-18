@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_joystick: ^0.2.1
   http: ^1.2.0
+  flutter_native_splash: ^2.3.11
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +51,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_joystick: ^0.2.1
   http: ^1.2.0
+  flutter_native_splash: ^2.3.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -67,6 +69,7 @@ flutter:
     - assets/home.jpg
     - assets/openmani.jpg
     - assets/ship3.jpg
+    - assets/DUMMY.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
