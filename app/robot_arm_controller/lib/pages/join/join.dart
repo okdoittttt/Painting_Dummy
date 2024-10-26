@@ -334,7 +334,7 @@ class _JoinPageState extends State<JoinPage> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                          content: Text('잘못된 정보입니다.'),
+                                          content: Text('${result}'),
                                         ),
                                       );
                                     }

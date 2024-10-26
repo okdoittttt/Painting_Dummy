@@ -1,6 +1,8 @@
 class AppControlURL {
   // static String baseURL = 'http://192.168.0.11:8000';
-  static String baseURL = 'http://222.96.226.78:8000';
+  // static String baseURL = 'http://222.96.226.78:8000'; // 홍준
+  // static String baseURL = 'http://192.168.56.145:8000'; // 재호
+  static String baseURL = 'http://172.20.10.6:8000'; // 옥무
 
   // 조이스틱 동작
   static String requestLeft = '$baseURL/move_motor/11/cw';
