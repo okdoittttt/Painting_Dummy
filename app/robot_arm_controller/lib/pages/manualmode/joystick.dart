@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'package:robot_arm_controller/pages/manualmode/appControlURL.dart';
@@ -93,54 +95,66 @@ class _JoystickExampleState extends State<BasicJoystick> {
           // ],
           ),
       body: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-                onPressed: () {
-                  sendRequest(AppControlURL.requestUp);
-                },
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.orange,
-                    minimumSize: Size(100, 50)),
-                child: Text('상승')),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  sendRequest(AppControlURL.requestDown);
-                },
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.orange,
-                    minimumSize: Size(100, 50)),
-                child: Text('하강')),
-            Align(
-              alignment: const Alignment(0, 0.8),
-              child: Joystick(
-                mode: JoystickMode.horizontalAndVertical,
-                listener: (details) {
-                  // 조이스틱 방향에 따른 동작
-                  if (details.y > 0.5) {
-                    moveDown();
-                    sendRequest(AppControlURL.requestBack);
-                  } else if (details.y < -0.5) {
-                    moveUp();
-                    sendRequest(AppControlURL.requestGO);
-                  } else if (details.x > 0.5) {
-                    moveRight();
-                    sendRequest(AppControlURL.requestRight);
-                  } else if (details.x < -0.5) {
-                    moveLeft();
-                    sendRequest(AppControlURL.requestLeft);
-                  } else if (details.x == 0 || details.y == 0) {
-                    moveStop();
-                    sendRequestStop(AppControlURL.requestStop);
-                  }
-                },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        sendRequest(AppControlURL.requestUp);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.orange,
+                          minimumSize: Size(100, 50)),
+                      child: Text('상승')),
+                  ElevatedButton(
+                      onPressed: () {
+                        sendRequest(AppControlURL.requestDown);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.orange,
+                          minimumSize: Size(100, 50)),
+                      child: Text('하강')),
+                ],
               ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Align(
+                  alignment: const Alignment(0, 0.8),
+                  child: Joystick(
+                    mode: JoystickMode.horizontalAndVertical,
+                    listener: (details) {
+                      // 조이스틱 방향에 따른 동작
+                      if (details.y > 0.5) {
+                        moveDown();
+                        sendRequest(AppControlURL.requestBack);
+                      } else if (details.y < -0.5) {
+                        moveUp();
+                        sendRequest(AppControlURL.requestGO);
+                      } else if (details.x > 0.5) {
+                        moveRight();
+                        sendRequest(AppControlURL.requestRight);
+                      } else if (details.x < -0.5) {
+                        moveLeft();
+                        sendRequest(AppControlURL.requestLeft);
+                      } else if (details.x == 0 || details.y == 0) {
+                        moveStop();
+                        sendRequestStop(AppControlURL.requestStop);
+                        sleep(Duration(milliseconds: 250));
+                        sendRequestStop(AppControlURL.requestStop);
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
