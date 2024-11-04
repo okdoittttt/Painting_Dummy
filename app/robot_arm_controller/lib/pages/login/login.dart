@@ -25,18 +25,53 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       print('로그인 성공: ${response.token}');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
       setState(() {
         token = response.token;
         statusCode = response.statusCode;
       });
-      return LoginService(token: response.token, statusCode: response.statusCode);
+      return LoginService(
+          token: response.token, statusCode: response.statusCode);
     } else {
       print('로그인 실패: ${response.statusCode}');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.orange,
+          title: Text(
+            '로그인 실패',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          content: Text(
+            ''
+            '회원 정보가 정확하지 않습니다.',
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('확인'))
+          ],
+        ),
+      );
       setState(() {
         token = response.token;
         statusCode = response.statusCode;
       });
-      return LoginService(token: response.token, statusCode: response.statusCode);
+      return LoginService(
+          token: response.token, statusCode: response.statusCode);
     }
   }
 
@@ -214,47 +249,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   _login();
-
-                                  if (statusCode == 200) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                RobotsconnectionScreen()));
-                                  } else {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        backgroundColor: Colors.orange,
-                                        title: Text(
-                                          '로그인 실패',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        content: Text(
-                                          ''
-                                          '회원 정보가 정확하지 않습니다.',
-                                          style: TextStyle(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('확인'))
-                                        ],
-                                      ),
-                                    );
-                                  }
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

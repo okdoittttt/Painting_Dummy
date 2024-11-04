@@ -195,8 +195,6 @@ class _RobotsconnectionScreenState extends State<RobotsconnectionScreen> {
               ],
             ),
             RobotsList(),
-            RobotsList(),
-            RobotsList(),
           ],
         ),
       ),
