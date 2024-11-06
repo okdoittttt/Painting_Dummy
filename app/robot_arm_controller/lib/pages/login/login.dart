@@ -248,9 +248,9 @@ class _LoginPageState extends State<LoginPage> {
                               flex: 5,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  _login();
-                                  // Navigator.push(context,
-                                  //     MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
+                                  // _login();
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => RobotsconnectionScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

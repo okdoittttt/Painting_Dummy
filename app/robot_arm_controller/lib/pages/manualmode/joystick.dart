@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -43,6 +44,14 @@ class _JoystickExampleState extends State<BasicJoystick> {
 
   void moveStop() {
     print('Move Stop');
+  }
+
+  void buttonDown() {
+    print('Start');
+  }
+
+  void buttonUp() {
+    print('End');
   }
 
   // =======================================================
@@ -103,27 +112,100 @@ class _JoystickExampleState extends State<BasicJoystick> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        sendRequest(AppControlURL.requestUp);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.orange,
-                          minimumSize: Size(100, 50)),
-                      child: Text('상승')),
-                  ElevatedButton(
-                      onPressed: () {
-                        sendRequest(AppControlURL.requestDown);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.orange,
-                          minimumSize: Size(100, 50)),
-                      child: Text('하강')),
+                  GestureDetector(
+                    onTapDown: (_) {
+                      sendRequest(AppControlURL.requestUp);
+                      buttonDown();
+                    },
+                    onTapUp: (_) {
+                      sendRequestStop(AppControlURL.requestStop);
+                      buttonUp();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3))
+                          ]),
+                      child: Center(
+                        child: Text(
+                          '상승',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTapDown: (_) {
+                      sendRequest(AppControlURL.requestUp);
+                      buttonDown();
+                    },
+                    onTapUp: (_) {
+                      sendRequestStop(AppControlURL.requestStop);
+                      buttonUp();
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3))
+                          ]),
+                      child: Center(
+                        child: Text(
+                          '분사',
+                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTapDown: (_) {
+                      sendRequest(AppControlURL.requestDown);
+                      buttonDown();
+                    },
+                    onTapUp: (_) {
+                      sendRequestStop(AppControlURL.requestStop);
+                      buttonUp();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3))
+                          ]),
+                      child: Center(
+                        child: Text(
+                          '하강',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+            SizedBox(height: 30,),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
