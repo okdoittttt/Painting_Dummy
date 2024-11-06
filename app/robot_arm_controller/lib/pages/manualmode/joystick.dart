@@ -79,6 +79,18 @@ class _JoystickExampleState extends State<BasicJoystick> {
       _statusMessage = result;
     });
   }
+
+  Future<void> requestPainOff(String url) async {
+    final HttpService httpService = HttpService(url);
+    setState(() {
+      _statusMessage = '정지 중 ...';
+    });
+
+    final result = await httpService.requestPaintOff();
+    setState(() {
+      _statusMessage = result;
+    });
+  }
   // =======================================================
 
   @override
@@ -144,11 +156,11 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   ),
                   GestureDetector(
                     onTapDown: (_) {
-                      sendRequest(AppControlURL.requestUp);
+                      sendRequest(AppControlURL.sprayOn);
                       buttonDown();
                     },
                     onTapUp: (_) {
-                      sendRequestStop(AppControlURL.requestStop);
+                      requestPainOff(AppControlURL.sprayOff);
                       buttonUp();
                     },
                     child: Container(
