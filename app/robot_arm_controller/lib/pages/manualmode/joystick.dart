@@ -22,6 +22,9 @@ class BasicJoystick extends StatefulWidget {
 class _JoystickExampleState extends State<BasicJoystick> {
   // JoystickMode _joystickMode = JoystickMode.all;
   String _statusMessage = '자동 제어 시작';
+  bool isPressedUpBtn = false;
+  bool isPressedDownBtn = false;
+  bool isPressedSprayBtn = false;
 
   // =======================================================
   // 움직임 동작 확인 테스트 코드
@@ -127,17 +130,21 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   GestureDetector(
                     onTapDown: (_) {
                       sendRequest(AppControlURL.requestUp);
-                      buttonDown();
+                      setState(() {
+                        isPressedDownBtn = true;
+                      });
                     },
                     onTapUp: (_) {
                       sendRequestStop(AppControlURL.requestStop);
-                      buttonUp();
+                      setState(() {
+                        isPressedDownBtn = false;
+                      });
                     },
                     child: Container(
                       width: 100,
                       height: 50,
                       decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: isPressedDownBtn ? Colors.blue : Colors.orange,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
@@ -157,17 +164,21 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   GestureDetector(
                     onTapDown: (_) {
                       sendRequest(AppControlURL.sprayOn);
-                      buttonDown();
+                      setState(() {
+                        isPressedSprayBtn = true;
+                      });
                     },
                     onTapUp: (_) {
                       requestPainOff(AppControlURL.sprayOff);
-                      buttonUp();
+                      setState(() {
+                        isPressedSprayBtn = false;
+                      });
                     },
                     child: Container(
                       width: 150,
                       height: 70,
                       decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: isPressedSprayBtn ? Colors.blue : Colors.orange,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
@@ -187,17 +198,21 @@ class _JoystickExampleState extends State<BasicJoystick> {
                   GestureDetector(
                     onTapDown: (_) {
                       sendRequest(AppControlURL.requestDown);
-                      buttonDown();
+                      setState(() {
+                        isPressedUpBtn = true;
+                      });
                     },
                     onTapUp: (_) {
                       sendRequestStop(AppControlURL.requestStop);
-                      buttonUp();
+                      setState(() {
+                        isPressedUpBtn = false;
+                      });
                     },
                     child: Container(
                       width: 100,
                       height: 50,
                       decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: isPressedUpBtn ? Colors.blue : Colors.orange,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
