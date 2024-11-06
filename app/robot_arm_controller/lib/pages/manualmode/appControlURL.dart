@@ -18,4 +18,8 @@ class AppControlURL {
   static String requestStop = '$baseURL/move_motor/11/stop';
   static String requestHeight = '$baseURL/move_height_motors/stop/stop';
   static String requestBackAndForth = '$baseURL/move_dual_motors/stop/stop';
+
+  // 페인트 분사
+  static String sprayOn = '$baseURL/paint/on';
+  static String sprayOff = '$baseURL/paint/off';
 }
