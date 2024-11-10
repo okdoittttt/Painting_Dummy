@@ -154,6 +154,8 @@ def move_motor(motor_id: int, direction: str):
         return {"error": packetHandler.getRxPacketError(dxl_error)}
 
     return {"message": f"Motor {motor_id} set to {direction}"}
+    
+
 
 # Updated route for moving dual motors using path parameters
 @app.post("/move_dual_motors/{direction_12}/{direction_13}")
@@ -185,6 +187,7 @@ def move_dual_motors(direction_12: str, direction_13: str):
     dxl_comm_result_13, dxl_error_13 = packetHandler.write4ByteTxRx(portHandler, moving_dx_id_13, ADDR_GOAL_VELOCITY, vel_13)
     if dxl_comm_result_13 != COMM_SUCCESS or dxl_error_13 != 0:
         return {"error": f"Motor 14 failed to move: {packetHandler.getTxRxResult(dxl_comm_result_13)}"}
+ 
 
     return {"message": f"Motors 12 and 13 moved. 12 to {direction_12}, 13 to {direction_13}"}
 
