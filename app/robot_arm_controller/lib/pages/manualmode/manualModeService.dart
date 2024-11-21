@@ -20,11 +20,12 @@ class HttpService {
     }
   }
 
-  Future<String> sendRequestStop() async {
+  Future<String> sendRequestStop(String baseUrl) async {
     try {
-      final uriStop = Uri.parse(AppControlURL.requestStop);
-      final uriHeight = Uri.parse(AppControlURL.requestHeight);
-      final uriBackAndForth = Uri.parse(AppControlURL.requestBackAndForth);
+      final uriStop = Uri.parse('http://$baseUrl${AppControlURL.requestStop}');
+      print(uriStop);
+      final uriHeight = Uri.parse('http://$baseUrl${AppControlURL.requestHeight}');
+      final uriBackAndForth = Uri.parse('http://$baseUrl${AppControlURL.requestBackAndForth}');
       final response = await http.post(uriStop);
       final responseHeight = await http.post(uriHeight);
       final responseBackAndForth = await http.post(uriBackAndForth);
@@ -39,9 +40,9 @@ class HttpService {
     }
   }
 
-  Future<String> requestPaintOff() async {
+  Future<String> requestPaintOff(String baseUrl) async {
     try {
-      final uriPaintOff = Uri.parse(AppControlURL.sprayOff);
+      final uriPaintOff = Uri.parse('http://$baseUrl${AppControlURL.sprayOff}');
       final response = await http.post(uriPaintOff);
 
       if (response.statusCode == 200) {

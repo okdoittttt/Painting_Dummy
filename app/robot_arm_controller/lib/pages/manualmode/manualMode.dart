@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:robot_arm_controller/pages/manualmode/appControlURL.dart';
 import 'package:robot_arm_controller/pages/manualmode/joystick.dart';
 import 'package:robot_arm_controller/pages/manualmode/joystickRotation90.dart';
 import 'package:robot_arm_controller/pages/manualmode/squareJoystick.dart';
@@ -7,7 +9,9 @@ const ballSize = 20.0;
 const step = 10.0;
 
 class ManualMode extends StatelessWidget {
-  const ManualMode({super.key});
+  final String baseURL;
+
+  const ManualMode({super.key, required this.baseURL});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +23,9 @@ class ManualMode extends StatelessWidget {
         body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               if (constraints.maxWidth < constraints.maxHeight) {
-                return BasicJoystick();
+                return BasicJoystick(baseURL: baseURL,);
               } else {
-                return BasicJoystickRotation();
+                return BasicJoystickRotation(baseURL: baseURL,);
               }
             }
         ),

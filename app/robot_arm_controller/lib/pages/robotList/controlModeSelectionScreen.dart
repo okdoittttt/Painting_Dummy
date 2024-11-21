@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:robot_arm_controller/pages/automode/autoMode.dart';
+import 'package:robot_arm_controller/pages/manualmode/appControlURL.dart';
+import 'package:robot_arm_controller/pages/manualmode/getIP.dart';
 import 'package:robot_arm_controller/pages/manualmode/manualMode.dart';
 
 class ControlModeSclectionScreen extends StatelessWidget {
@@ -38,7 +41,24 @@ class ControlModeSclectionScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ManualMode()));
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(25.0),
+                                topLeft: Radius.circular(25.0))),
+                        child: DraggableScrollableSheet(
+                          expand: false,
+                          builder: (context, scrollController) {
+                            return ChangeNotifierProvider(create: (context) => BaseUrlProvider(),
+                            child: GetIP(),);
+                          },
+                        ),
+                      );
+                    });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
