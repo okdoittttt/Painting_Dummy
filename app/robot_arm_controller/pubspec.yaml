@@ -39,6 +39,7 @@ dependencies:
   http: ^1.2.0
   flutter_native_splash: ^2.3.11
   shared_preferences: ^2.2.3
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,7 @@ dev_dependencies:
   http: ^1.2.0
   flutter_native_splash: ^2.3.11
   shared_preferences: ^2.2.3
+  provider: ^6.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
