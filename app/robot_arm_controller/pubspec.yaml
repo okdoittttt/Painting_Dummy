@@ -38,6 +38,7 @@ dependencies:
   flutter_joystick: ^0.2.1
   http: ^1.2.0
   flutter_native_splash: ^2.3.11
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ dev_dependencies:
   flutter_joystick: ^0.2.1
   http: ^1.2.0
   flutter_native_splash: ^2.3.11
+  shared_preferences: ^2.2.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
