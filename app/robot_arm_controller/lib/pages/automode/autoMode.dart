@@ -1,30 +1,53 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:robot_arm_controller/pages/robotList/controlModeSelectionScreen.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
-import 'package:http/http.dart' as http;
 import '../manualmode/manualModeService.dart';
 
 class AutoMode extends StatefulWidget {
-  const AutoMode({super.key});
+  final String baseURL;
+
+  const AutoMode({super.key, required this.baseURL});
 
   @override
   State<AutoMode> createState() => _AutoModeState();
 }
 
 class _AutoModeState extends State<AutoMode> {
-  // 로봇 데이터를 받은 후 아래 화면에 사용
   String robotsName = 'Open MANIPULATOR-X';
-  String _statusMessage = '자동 제어 시작';
-  
+  String connectedState = '동작 비활성화 ...';
+  bool buttonToggle = false;
+
   Future<void> sendRequestStop() async {
-    final HttpService httpService = HttpService('http://192.168.0.11:8000/move_motor/11/stop');
+    final HttpService httpService = HttpService('http://${widget.baseURL}/initialize');
     setState(() {
-      _statusMessage = '정지 중 ...';
+      buttonToggle = false;
+      connectedState = '동작 비활성화 ...';
     });
 
     final result = await httpService.sendRequest();
     setState(() {
-      _statusMessage = result;
+    });
+  }
+
+  Future<void> sendRequest() async {
+    final HttpService httpService = HttpService('http://${widget.baseURL}/initialize');
+    setState(() {
+      buttonToggle = true;
+      connectedState = '동작 활성화 ...';
+    });
+
+    final result = await httpService.sendRequest();
+    setState(() {
+    });
+  }
+
+  // 모달 출력
+  bool _showConfirmationDialog = false;
+
+  void _showConfinationDialog() {
+    setState(() {
+      _showConfirmationDialog = true;
     });
   }
 
@@ -104,7 +127,7 @@ class _AutoModeState extends State<AutoMode> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 4, 16, 0),
                 child: Text(
-                  '연결 완료...',
+                  connectedState,
                   style: TextStyle(
                       color: Colors.orange,
                       fontWeight: FontWeight.bold,
@@ -170,176 +193,250 @@ class _AutoModeState extends State<AutoMode> {
                                       children: [
                                         // 자동 제어 모드 구현 후 사용
                                         GestureDetector(
-                                          // onTap: () => sendRequest(),
-                                          child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.4,
-                                            height: 160,
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  100, 196, 196, 196),
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(12),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.brightness_high,
-                                                    color: Colors.orange,
-                                                    size: 44,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 12, 0, 4),
-                                                    child: Text(
-                                                      '자동 제어 시작',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18),
-                                                    ),
-                                                  ),
-                                                ],
+                                          onTap: buttonToggle
+                                              ? null
+                                              : () => sendRequest(),
+                                          child: Stack(children: [
+                                            Container(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.4,
+                                              height: 160,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    100, 196, 196, 196),
+                                                borderRadius:
+                                                    BorderRadius.circular(24),
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => sendRequestStop(),
-                                          child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.4,
-                                            height: 160,
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  100, 196, 196, 196),
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(12),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.brightness_low,
-                                                    color: Colors.orange,
-                                                    size: 44,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 12, 0, 4),
-                                                    child: Text(
-                                                      '동작 초기화',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Urbanist',
-                                                        letterSpacing: 0.0,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(12),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.brightness_high,
+                                                      color: Colors.orange,
+                                                      size: 44,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 12, 0, 4),
+                                                      child: Text(
+                                                        '자동 제어 시작',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.4,
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(
-                                                100, 196, 196, 196),
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(12),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.do_not_disturb_alt,
-                                                  color: Colors.orange,
-                                                  size: 44,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 12, 0, 4),
-                                                  child: Text(
-                                                    '연결 해제',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      letterSpacing: 0.0,
-                                                      color: Colors.black,
-                                                      fontSize: 18,
-                                                    ),
+                                            if (buttonToggle)
+                                              Positioned.fill(
+                                                child: Opacity(
+                                                  opacity: 0.8,
+                                                  child: Container(
+                                                    color: Colors.white
+                                                        .withOpacity(0.8),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
+                                              ),
+                                          ]),
                                         ),
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
+                                        GestureDetector(
+                                          onTap: !buttonToggle
+                                              ? null
+                                              : () => sendRequestStop(),
+                                          child: Stack(children: [
+                                            Container(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
                                                   0.4,
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(
-                                                100, 196, 196, 196),
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(12),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.model_training,
-                                                  color: Colors.orange,
-                                                  size: 44,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 12, 0, 4),
-                                                  child: Text(
-                                                    '수동 제어 변경',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      letterSpacing: 0.0,
-                                                      color: Colors.black,
-                                                      fontSize: 18,
+                                              height: 160,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    100, 196, 196, 196),
+                                                borderRadius:
+                                                    BorderRadius.circular(24),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(12),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.brightness_low,
+                                                      color: Colors.orange,
+                                                      size: 44,
                                                     ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 12, 0, 4),
+                                                      child: Text(
+                                                        '동작 초기화',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          letterSpacing: 0.0,
+                                                          color: Colors.black,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            if (!buttonToggle)
+                                              Positioned.fill(
+                                                child: Opacity(
+                                                  opacity: 0.8,
+                                                  child: Container(
+                                                    color: Colors.white
+                                                        .withOpacity(0.8),
                                                   ),
                                                 ),
-                                              ],
+                                              )
+                                          ]),
+                                        ),
+                                        GestureDetector(
+                                          onTap: _showConfinationDialog,
+                                          child: Stack(children: [
+                                            Container(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.4,
+                                              height: 160,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    100, 196, 196, 196),
+                                                borderRadius:
+                                                    BorderRadius.circular(24),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(12),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.do_not_disturb_alt,
+                                                      color: Colors.orange,
+                                                      size: 44,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 12, 0, 4),
+                                                      child: Text(
+                                                        '연결 해제',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          letterSpacing: 0.0,
+                                                          color: Colors.black,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
+                                            if (buttonToggle)
+                                              Positioned.fill(
+                                                child: Opacity(
+                                                  opacity: 0.8,
+                                                  child: Container(
+                                                    color: Colors.white
+                                                        .withOpacity(0.8),
+                                                  ),
+                                                ),
+                                              )
+                                          ]),
+                                        ),
+                                        GestureDetector(
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                width:
+                                                    MediaQuery.sizeOf(context)
+                                                            .width *
+                                                        0.4,
+                                                height: 160,
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                      100, 196, 196, 196),
+                                                  borderRadius:
+                                                      BorderRadius.circular(24),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(12),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.model_training,
+                                                        color: Colors.orange,
+                                                        size: 44,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(0, 12,
+                                                                    0, 4),
+                                                        child: Text(
+                                                          '수동 제어 변경',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            letterSpacing: 0.0,
+                                                            color: Colors.black,
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              if (buttonToggle)
+                                                Positioned.fill(
+                                                  child: Opacity(
+                                                    opacity: 0.8,
+                                                    child: Container(
+                                                      color: Colors.white
+                                                          .withOpacity(0.8),
+                                                    ),
+                                                  ),
+                                                )
+                                            ],
                                           ),
                                         ),
                                       ],

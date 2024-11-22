@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:robot_arm_controller/pages/manualmode/appControlURL.dart';
+import 'package:robot_arm_controller/pages/automode/autoMode.dart';
 import 'package:robot_arm_controller/pages/manualmode/manualMode.dart';
 
 class GetIP extends StatefulWidget {
-  const GetIP({super.key});
+  final String stateMode;
+
+  const GetIP({super.key, required this.stateMode});
 
   @override
   State<GetIP> createState() => _GetIPState();
@@ -35,12 +36,19 @@ class _GetIPState extends State<GetIP> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ManualMode(
-                                baseURL: _textController.text,
-                              )));
+                  if (widget.stateMode == 'manual') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ManualMode(baseURL: _textController.text,)));
+                  } else if (widget.stateMode == 'auto') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AutoMode(baseURL: _textController.text)));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange, minimumSize: Size(240, 50)),

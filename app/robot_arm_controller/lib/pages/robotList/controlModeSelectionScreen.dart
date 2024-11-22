@@ -22,10 +22,24 @@ class ControlModeSclectionScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AutoMode()),
-                );
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(25.0),
+                                topLeft: Radius.circular(25.0))),
+                        child: DraggableScrollableSheet(
+                          expand: false,
+                          builder: (context, scrollController) {
+                            return ChangeNotifierProvider(create: (context) => BaseUrlProvider(),
+                              child: GetIP(stateMode: 'auto',),);
+                          },
+                        ),
+                      );
+                    });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
@@ -54,7 +68,7 @@ class ControlModeSclectionScreen extends StatelessWidget {
                           expand: false,
                           builder: (context, scrollController) {
                             return ChangeNotifierProvider(create: (context) => BaseUrlProvider(),
-                            child: GetIP(),);
+                            child: GetIP(stateMode: 'manual',),);
                           },
                         ),
                       );
