@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:robot_arm_controller/pages/manualmode/joystick.dart';
+import 'package:robot_arm_controller/pages/manualmode/joystickRotation90.dart';
 
 class JoystickScreen extends StatefulWidget {
-  const JoystickScreen({super.key});
+  final String baseUrl;
+  const JoystickScreen({super.key, required this.baseUrl});
 
   @override
   State<JoystickScreen> createState() => _JoystickScreenState();
@@ -17,9 +19,9 @@ class _JoystickScreenState extends State<JoystickScreen> {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth < constraints.maxHeight) {
-            return BasicJoystick();
+            return BasicJoystick(baseURL: widget.baseUrl,);
           } else {
-            return BasicJoystick();
+            return BasicJoystickRotation(baseURL: widget.baseUrl);
           }
         }
       ),

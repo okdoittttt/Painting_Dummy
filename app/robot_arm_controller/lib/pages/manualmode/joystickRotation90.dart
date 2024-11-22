@@ -13,7 +13,9 @@ import 'manualModeService.dart';
 BallProperties properties = BallProperties();
 
 class BasicJoystickRotation extends StatefulWidget {
-  const BasicJoystickRotation({super.key});
+  final String baseURL;
+
+  const BasicJoystickRotation({super.key, required this.baseURL});
 
   @override
   State<BasicJoystickRotation> createState() => _JoystickExampleState();
@@ -41,11 +43,12 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
 
   Future<void> sendRequestStop(String url) async {
     final HttpService httpService = HttpService(url);
+    print(url);
     setState(() {
       _statusMessage = '정지 중 ...';
     });
 
-    final result = await httpService.sendRequestStop();
+    final result = await httpService.sendRequestStop(widget.baseURL);
     setState(() {
       _statusMessage = result;
     });
@@ -57,7 +60,7 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
       _statusMessage = '정지 중 ...';
     });
 
-    final result = await httpService.requestPaintOff();
+    final result = await httpService.requestPaintOff(widget.baseURL);
     setState(() {
       _statusMessage = result;
     });
@@ -84,13 +87,13 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
                 children: [
                   GestureDetector(
                     onTapDown: (_) {
-                      sendRequest(AppControlURL.requestUp);
+                      sendRequest('http://${widget.baseURL}${AppControlURL.requestUp}');
                       setState(() {
                         isPressedDownBtn = true;
                       });
                     },
                     onTapUp: (_) {
-                      sendRequestStop(AppControlURL.requestStop);
+                      sendRequestStop('http://${widget.baseURL}${AppControlURL.requestStop}');
                       setState(() {
                         isPressedDownBtn = false;
                       });
@@ -118,13 +121,13 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
                   ),
                   GestureDetector(
                     onTapDown: (_) {
-                      sendRequest(AppControlURL.sprayOn);
+                      sendRequest('http://${widget.baseURL}${AppControlURL.sprayOn}');
                       setState(() {
                         isPressedSprayBtn = true;
                       });
                     },
                     onTapUp: (_) {
-                      requestPainOff(AppControlURL.sprayOff);
+                      requestPainOff('http://${widget.baseURL}${AppControlURL.sprayOff}');
                       setState(() {
                         isPressedSprayBtn = false;
                       });
@@ -152,13 +155,13 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
                   ),
                   GestureDetector(
                     onTapDown: (_) {
-                      sendRequest(AppControlURL.requestDown);
+                      sendRequest('http://${widget.baseURL}${AppControlURL.requestDown}');
                       setState(() {
                         isPressedUpBtn = true;
                       });
                     },
                     onTapUp: (_) {
-                      sendRequestStop(AppControlURL.requestStop);
+                      sendRequestStop('http://${widget.baseURL}${AppControlURL.requestStop}');
                       setState(() {
                         isPressedUpBtn = false;
                       });
@@ -197,17 +200,17 @@ class _JoystickExampleState extends State<BasicJoystickRotation> {
                     listener: (details) {
                       // 조이스틱 방향에 따른 동작
                       if (details.y > 0.5) {
-                        sendRequest(AppControlURL.requestBack);
+                        sendRequest('http://${widget.baseURL}${AppControlURL.requestBack}');
                       } else if (details.y < -0.5) {
-                        sendRequest(AppControlURL.requestGO);
+                        sendRequest('http://${widget.baseURL}${AppControlURL.requestGO}');
                       } else if (details.x > 0.5) {
-                        sendRequest(AppControlURL.requestRight);
+                        sendRequest('http://${widget.baseURL}${AppControlURL.requestRight}');
                       } else if (details.x < -0.5) {
-                        sendRequest(AppControlURL.requestLeft);
+                        sendRequest('http://${widget.baseURL}${AppControlURL.requestLeft}');
                       } else if (details.x == 0 || details.y == 0) {
-                        sendRequestStop(AppControlURL.requestStop);
+                        sendRequestStop('http://${widget.baseURL}${AppControlURL.requestStop}');
                         sleep(Duration(milliseconds: 250));
-                        sendRequestStop(AppControlURL.requestStop);
+                        sendRequestStop('http://${widget.baseURL}${AppControlURL.requestStop}');
                       }
                     },
                   ),
