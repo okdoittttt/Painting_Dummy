@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:robot_arm_controller/pages/manualmode/joystickScreen.dart';
+import 'package:robot_arm_controller/pages/manualmode/manualMode.dart';
 import 'package:robot_arm_controller/pages/robotList/robotsconnectionScreen.dart';
 import '../manualmode/manualModeService.dart';
 
@@ -376,6 +378,9 @@ class _AutoModeState extends State<AutoMode> {
                                           ]),
                                         ),
                                         GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ManualMode(baseURL: widget.baseURL)));
+                                          },
                                           child: Stack(
                                             children: [
                                               Container(
